@@ -1,65 +1,163 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { mountains } from "@/data/mountains"
+
+const STORAGE_KEY = "vibe-progress"
+
+const DIFFICULTY_COLOR: Record<string, string> = {
+  입문: "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30",
+  초급: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+  중급: "bg-orange-500/20 text-orange-300 border border-orange-500/30",
+  고급: "bg-red-500/20 text-red-300 border border-red-500/30",
+}
+
+export default function HomePage() {
+  const [completed, setCompleted] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY)
+      setCompleted(new Set(raw ? JSON.parse(raw) : []))
+    } catch {
+      setCompleted(new Set())
+    }
+  }, [])
+
+  const totalStages = mountains.reduce((acc, m) => acc + m.stages.length, 0)
+  const doneStages = mountains.reduce(
+    (acc, m) => acc + m.stages.filter((s) => completed.has(s.id)).length,
+    0
+  )
+  const overallProgress = totalStages > 0 ? Math.round((doneStages / totalStages) * 100) : 0
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 relative overflow-hidden">
+      {/* 배경 장식 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative max-w-2xl mx-auto px-4 py-12">
+        {/* 헤더 */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-4xl mb-5 shadow-xl">
+            ⛰️
+          </div>
+          <h1 className="text-4xl font-black text-white mb-3 tracking-tight">
+            바이브 코딩 산악 학교
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-indigo-300 text-lg leading-relaxed">
+            산을 오르듯, 단계별로 배우는 AI 코딩 여정
+          </p>
+          <p className="text-indigo-400/70 text-sm mt-2">
+            Claude Code로 터미널에서 AI와 함께 코딩하는 법을 배워보세요
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* 전체 진행률 */}
+        {doneStages > 0 && (
+          <div className="mb-8 bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 shadow-xl">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-white font-bold text-sm">전체 등반 진행률</span>
+              <span className="text-indigo-300 text-sm font-mono">{doneStages}/{totalStages} 단계</span>
+            </div>
+            <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full transition-all duration-700 shadow-sm shadow-indigo-400/50"
+                style={{ width: `${overallProgress}%` }}
+              />
+            </div>
+            <p className="text-indigo-400 text-xs mt-2 text-right">{overallProgress}% 완료</p>
+          </div>
+        )}
+
+        {/* 산 선택 안내 */}
+        <div className="mb-6 text-center">
+          <p className="text-white/50 text-xs tracking-widest uppercase font-medium mb-1">Mountain Selection</p>
+          <h2 className="text-white/80 text-sm font-medium">
+            🗺️ 어떤 산부터 오르시겠어요?
+          </h2>
         </div>
-      </main>
+
+        {/* 산 카드 목록 */}
+        <div className="flex flex-col gap-3">
+          {mountains.map((mountain, idx) => {
+            const mountainDone = mountain.stages.filter((s) => completed.has(s.id)).length
+            const mountainProgress = Math.round((mountainDone / mountain.stages.length) * 100)
+            const isCompleted = mountainProgress === 100
+
+            return (
+              <Link key={mountain.id} href={`/mountain/${mountain.id}`}>
+                <div className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer ${
+                  isCompleted
+                    ? "border-yellow-400/40 bg-yellow-500/10 backdrop-blur-md"
+                    : "border-white/15 bg-white/8 backdrop-blur-md hover:bg-white/12 hover:border-white/25"
+                }`}>
+                  {/* 글로우 효과 */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${mountain.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+
+                  <div className="relative p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 flex flex-col items-center gap-1">
+                        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${mountain.color} flex items-center justify-center text-2xl shadow-lg`}>
+                          {isCompleted ? "🏆" : mountain.emoji}
+                        </div>
+                        <span className="text-white/30 text-xs font-mono">#{idx + 1}</span>
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                          <h3 className="text-white font-bold text-base">{mountain.name}</h3>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DIFFICULTY_COLOR[mountain.difficulty]}`}>
+                            {mountain.difficulty}
+                          </span>
+                          {isCompleted && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-400/20 text-yellow-300 border border-yellow-400/30 font-medium">
+                              완등 🏆
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-white/50 text-xs leading-relaxed mb-3">
+                          {mountain.description}
+                        </p>
+
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full bg-gradient-to-r ${mountain.color} rounded-full transition-all duration-500`}
+                              style={{ width: `${mountainProgress}%` }}
+                            />
+                          </div>
+                          <span className="text-white/40 text-xs whitespace-nowrap font-mono">
+                            {mountainDone}/{mountain.stages.length}
+                          </span>
+                          <div className="flex items-center gap-1 text-white/30 text-xs">
+                            <span>⛰</span>
+                            <span className="font-mono">{mountain.elevation.toLocaleString()}m</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-white/25 group-hover:text-white/60 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
+                        →
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+
+        <div className="mt-12 text-center text-white/20 text-xs space-y-1">
+          <p>Claude Code + Next.js로 만든 바이브 코딩 학습 플랫폼</p>
+          <p>진행 상황은 브라우저에 자동 저장됩니다</p>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
