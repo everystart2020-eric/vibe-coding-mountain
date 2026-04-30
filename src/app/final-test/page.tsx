@@ -262,7 +262,6 @@ export default function FinalTestPage() {
   const [current, setCurrent] = useState(0)
   const [answers, setAnswers] = useState<(number | null)[]>(Array(QUESTIONS.length).fill(null))
   const [selected, setSelected] = useState<number | null>(null)
-  const [showExplanation, setShowExplanation] = useState(false)
 
   const total = QUESTIONS.length
   const score = answers.filter((a, i) => a === QUESTIONS[i].correct).length
@@ -277,8 +276,6 @@ export default function FinalTestPage() {
       ? { label: "중간 베이스캠프 ⛺", color: "text-blue-300", bg: "bg-blue-400/20 border-blue-400/30" }
       : { label: "재도전 권장 💪", color: "text-orange-300", bg: "bg-orange-400/20 border-orange-400/30" }
 
-  const wrongQuestions = QUESTIONS.filter((q, i) => answers[i] !== q.correct && answers[i] !== null)
-
   const mountainStats = MOUNTAIN_ORDER.map((mid) => {
     const qs = QUESTIONS.filter((q) => q.mountainId === mid)
     const correct = qs.filter((q) => {
@@ -288,21 +285,11 @@ export default function FinalTestPage() {
     return { id: mid, name: qs[0]?.mountain ?? mid, emoji: qs[0]?.emoji, color: qs[0]?.color, correct, total: qs.length }
   })
 
-  function handleSelect(idx: number) {
-    if (showExplanation) return
-    setSelected(idx)
-  }
-
-  function handleConfirm() {
+  function handleNext() {
     if (selected === null) return
     const next = [...answers]
     next[current] = selected
     setAnswers(next)
-    setShowExplanation(true)
-  }
-
-  function handleNext() {
-    setShowExplanation(false)
     setSelected(null)
     if (current + 1 >= total) {
       setView("result")
@@ -316,7 +303,6 @@ export default function FinalTestPage() {
     setCurrent(0)
     setAnswers(Array(QUESTIONS.length).fill(null))
     setSelected(null)
-    setShowExplanation(false)
   }
 
   // ── 인트로 화면 ───────────────────────────────────────────
@@ -329,7 +315,7 @@ export default function FinalTestPage() {
             <h1 className="text-3xl font-black text-white mb-2">바이브 코딩 종합 테스트</h1>
             <p className="text-indigo-300 text-sm leading-relaxed">
               5개 산, 20문제로 배운 내용을 점검합니다.<br />
-              틀린 문항은 자동 정리되어 맞춤 PDF 보고서로 저장할 수 있어요.
+              정답은 마지막에 한번에 확인할 수 있어요.
             </p>
           </div>
 
@@ -347,6 +333,7 @@ export default function FinalTestPage() {
           <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 text-sm text-white/60 space-y-1">
             <p>📌 문항 수: 총 {total}문제 (산별 4문제)</p>
             <p>⏱️ 예상 소요 시간: 10~15분</p>
+            <p>📝 정답은 모든 문제 풀고 난 후 한번에 확인</p>
             <p>📄 완료 후 PDF 보고서 저장 가능</p>
           </div>
 
@@ -371,7 +358,6 @@ export default function FinalTestPage() {
   if (view === "test") {
     const q = QUESTIONS[current]
     const progressPct = Math.round((current / total) * 100)
-    const isCorrect = selected === q.correct
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 p-4">
@@ -397,20 +383,16 @@ export default function FinalTestPage() {
 
           <div className="flex flex-col gap-2 mb-4">
             {q.options.map((opt, i) => {
-              let style = "border-white/15 bg-white/5 text-white/80 hover:border-white/30 hover:bg-white/10 cursor-pointer"
-              if (showExplanation) {
-                if (i === q.correct) style = "border-emerald-400/60 bg-emerald-500/20 text-emerald-200 cursor-default"
-                else if (i === selected && i !== q.correct) style = "border-red-400/60 bg-red-500/20 text-red-200 cursor-default"
-                else style = "border-white/10 bg-white/3 text-white/30 cursor-default"
-              } else if (selected === i) {
-                style = "border-indigo-400/60 bg-indigo-500/20 text-indigo-200 cursor-pointer"
-              }
-
+              const isSelected = selected === i
               return (
                 <button
                   key={i}
-                  onClick={() => handleSelect(i)}
-                  className={`text-left px-4 py-3 rounded-xl border text-sm transition-all duration-200 ${style}`}
+                  onClick={() => setSelected(i)}
+                  className={`text-left px-4 py-3 rounded-xl border text-sm transition-all duration-200 ${
+                    isSelected
+                      ? "border-indigo-400/60 bg-indigo-500/20 text-indigo-200"
+                      : "border-white/15 bg-white/5 text-white/80 hover:border-white/30 hover:bg-white/10"
+                  }`}
                 >
                   <span className="text-white/40 mr-2 font-mono">{String.fromCharCode(65 + i)}.</span>
                   {opt}
@@ -419,31 +401,13 @@ export default function FinalTestPage() {
             })}
           </div>
 
-          {showExplanation && (
-            <div className={`rounded-xl border p-4 mb-4 text-sm ${isCorrect ? "bg-emerald-500/10 border-emerald-400/30" : "bg-red-500/10 border-red-400/30"}`}>
-              <p className={`font-bold mb-1 ${isCorrect ? "text-emerald-300" : "text-red-300"}`}>
-                {isCorrect ? "✓ 정답!" : "✗ 오답"}
-              </p>
-              <p className="text-white/70 leading-relaxed">{q.explanation}</p>
-            </div>
-          )}
-
-          {!showExplanation ? (
-            <button
-              onClick={handleConfirm}
-              disabled={selected === null}
-              className="w-full py-3 rounded-xl font-bold text-white bg-indigo-500/40 border border-indigo-400/40 disabled:opacity-30 hover:bg-indigo-500/50 transition-all"
-            >
-              정답 확인
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition-opacity"
-            >
-              {current + 1 >= total ? "결과 보기 →" : "다음 문제 →"}
-            </button>
-          )}
+          <button
+            onClick={handleNext}
+            disabled={selected === null}
+            className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 disabled:opacity-30 hover:opacity-90 transition-opacity"
+          >
+            {current + 1 >= total ? "결과 보기 →" : "다음 문제 →"}
+          </button>
         </div>
       </div>
     )
@@ -512,35 +476,57 @@ export default function FinalTestPage() {
             </div>
           </div>
 
-          {/* 헷갈린 문제 */}
-          {wrongQuestions.length > 0 && (
-            <div className="mb-5 result-card bg-red-500/10 backdrop-blur-md rounded-2xl border border-red-400/20 p-5">
-              <h2 className="text-red-300 font-bold text-sm mb-4">
-                ⚠️ 헷갈렸던 부분 ({wrongQuestions.length}문제) — 다시 확인하세요
-              </h2>
-              <div className="flex flex-col gap-3">
-                {wrongQuestions.map((q, i) => {
-                  const qIdx = QUESTIONS.indexOf(q)
-                  const myAnswer = answers[qIdx]
-                  return (
-                    <div key={i} className="result-card bg-white/5 rounded-xl p-4 border border-white/10">
-                      <p className="text-white/40 text-xs mb-1">{q.emoji} {q.mountain}</p>
-                      <p className="text-white/90 text-sm font-medium mb-2">Q. {q.question}</p>
-                      <p className="text-red-300 text-xs mb-1">
-                        내 답: {myAnswer !== null ? q.options[myAnswer] : "미선택"}
-                      </p>
-                      <p className="text-emerald-300 text-xs mb-2">
-                        정답: {q.options[q.correct]}
-                      </p>
-                      <p className="text-white/55 text-xs leading-relaxed border-t border-white/10 pt-2">
+          {/* 전체 문제 정답 확인 */}
+          <div className="mb-5 result-card bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-5">
+            <h2 className="text-white font-bold text-sm mb-4">📝 전체 문제 정답 확인</h2>
+            <div className="flex flex-col gap-3">
+              {QUESTIONS.map((q, i) => {
+                const myAnswer = answers[i]
+                const isCorrect = myAnswer === q.correct
+                return (
+                  <div
+                    key={i}
+                    className={`result-card rounded-xl p-4 border ${
+                      isCorrect
+                        ? "bg-emerald-500/10 border-emerald-400/20"
+                        : "bg-red-500/10 border-red-400/20"
+                    }`}
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <span className={`text-xs font-bold flex-shrink-0 mt-0.5 ${isCorrect ? "text-emerald-400" : "text-red-400"}`}>
+                        {isCorrect ? "✓" : "✗"} Q{i + 1}.
+                      </span>
+                      <p className="text-white/90 text-sm font-medium leading-relaxed">{q.question}</p>
+                    </div>
+
+                    <div className="flex flex-col gap-1 ml-6 mb-2">
+                      {q.options.map((opt, j) => {
+                        const isMyPick = myAnswer === j
+                        const isRightAnswer = j === q.correct
+                        let style = "text-white/30"
+                        if (isRightAnswer) style = "text-emerald-300 font-semibold"
+                        else if (isMyPick && !isCorrect) style = "text-red-300 line-through"
+                        return (
+                          <p key={j} className={`text-xs ${style}`}>
+                            <span className="font-mono mr-1">{String.fromCharCode(65 + j)}.</span>
+                            {opt}
+                            {isRightAnswer && <span className="ml-1 text-emerald-400">← 정답</span>}
+                            {isMyPick && !isCorrect && <span className="ml-1 text-red-400">← 내 답</span>}
+                          </p>
+                        )
+                      })}
+                    </div>
+
+                    {!isCorrect && (
+                      <p className="ml-6 text-white/55 text-xs leading-relaxed border-t border-white/10 pt-2">
                         💡 {q.explanation}
                       </p>
-                    </div>
-                  )
-                })}
-              </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
-          )}
+          </div>
 
           {/* 핵심 포인트 */}
           <div className="mb-6 result-card bg-indigo-500/10 backdrop-blur-md rounded-2xl border border-indigo-400/20 p-5">
