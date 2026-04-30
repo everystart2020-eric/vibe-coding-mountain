@@ -57,16 +57,24 @@ export const mountains: Mountain[] = [
 - 💪 **강력하다** — GUI로 할 수 없는 것도 가능
 - 🤖 **AI 코딩 필수** — Claude Code는 터미널에서 실행됩니다
 
-### Mac에서 터미널 열기
+### 터미널 열기
+
+**Mac:**
 1. **Spotlight** (Cmd + Space) 열기
 2. "Terminal" 입력
 3. Enter 키 누르기
 
-### 터미널 vs Finder
-Finder로 파일을 클릭해서 여는 것처럼, 터미널은 같은 일을 **타이핑**으로 합니다.
+**Windows:**
+1. **시작 버튼** 우클릭 → "Windows Terminal" 선택 (또는 Win + X)
+2. 없으면: 시작 메뉴에서 "PowerShell" 검색
+3. Windows 11은 기본 설치, Windows 10은 Microsoft Store에서 "Windows Terminal" 설치
+
+### 터미널 vs 파일 탐색기
+파일 탐색기(Mac: Finder, Windows: 탐색기)로 클릭하는 것처럼, 터미널은 같은 일을 **타이핑**으로 합니다.
 \`\`\`bash
-# Finder에서 클릭하는 대신
-open .    # 현재 폴더를 Finder로 열기
+# 파일 탐색기 대신 터미널에서
+open .        # Mac: 현재 폴더를 Finder로 열기
+explorer .    # Windows: 현재 폴더를 탐색기로 열기
 \`\`\``,
         quiz: [
           {
@@ -76,10 +84,10 @@ open .    # 현재 폴더를 Finder로 열기
             explanation: "터미널은 텍스트 명령어를 입력해서 컴퓨터와 대화합니다. 처음엔 어색하지만 곧 익숙해져요!"
           },
           {
-            question: "Mac에서 터미널을 빠르게 여는 단축키는?",
-            options: ["Ctrl + T", "Cmd + Space (Spotlight 검색)", "Alt + F4", "Cmd + Tab"],
+            question: "Windows에서 터미널(PowerShell/Windows Terminal)을 빠르게 여는 방법은?",
+            options: ["Ctrl + T", "시작 버튼 우클릭 → Windows Terminal (또는 Win+X)", "Alt + F4", "Ctrl + Alt + T"],
             correct: 1,
-            explanation: "Cmd + Space로 Spotlight를 열고 'Terminal'을 검색하면 빠르게 열 수 있어요."
+            explanation: "시작 버튼 우클릭 또는 Win+X 단축키로 메뉴를 열면 Windows Terminal을 빠르게 실행할 수 있어요. Mac은 Cmd+Space로 Spotlight 검색 후 Terminal을 입력하면 돼요."
           }
         ]
       },
@@ -159,25 +167,42 @@ rm -rf 폴더이름       # 폴더 통째로 삭제 (복구 불가!)
 
 등산화도 내 발에 맞게 길들이듯, 터미널도 내 취향대로 세팅하면 훨씬 즐거워요.
 
-### 터미널 테마 바꾸기 (Mac iTerm2)
+### 터미널 업그레이드 — 더 예쁘게!
+
+**Mac — iTerm2 설치:**
 \`\`\`bash
 # iTerm2 설치 (Homebrew 필요)
 brew install --cask iterm2
 \`\`\`
 iTerm2 → Preferences → Profiles → Colors → Color Presets에서 **Solarized Dark** 추천!
 
-### Oh My Zsh — 터미널의 등산복
+**Windows — Windows Terminal (이미 예쁨!):**
+- Windows Terminal은 기본으로 탭, 색상 테마 지원
+- 설정(Ctrl+,) → 모양 → **One Half Dark** 테마 추천
+
+### Oh My Zsh — 터미널의 등산복 (Mac/Linux)
 \`\`\`bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 \`\`\`
 설치하면 폴더 경로, Git 상태가 한눈에 보여요.
 
+**Windows PowerShell 꾸미기 — Oh My Posh:**
+\`\`\`powershell
+# PowerShell에서 실행
+winget install JanDeDobbeleer.OhMyPosh
+\`\`\`
+
 ### 유용한 별명(alias) 만들기
 \`\`\`bash
-# ~/.zshrc 파일에 추가
+# Mac/Linux: ~/.zshrc 파일에 추가
 alias ll='ls -la'
 alias ..='cd ..'
 alias home='cd ~'
+\`\`\`
+\`\`\`powershell
+# Windows PowerShell: $PROFILE 파일에 추가
+Set-Alias ll Get-ChildItem
+function goHome { Set-Location ~ }
 \`\`\`
 
 ### 꿀팁 3가지
@@ -211,7 +236,7 @@ alias home='cd ~'
 **패키지 매니저**는 프로그램을 쉽게 설치/삭제하는 도구입니다.
 앱스토어의 터미널 버전이라고 생각하세요!
 
-### Homebrew (Mac 전용) — 등산 장비 상점
+### Homebrew (Mac) — 등산 장비 상점
 \`\`\`bash
 # Homebrew 설치
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -226,6 +251,21 @@ brew install git
 # 설치된 목록 보기
 brew list
 \`\`\`
+
+### winget (Windows 11/10) — 윈도우 등산 장비 상점
+\`\`\`powershell
+# winget은 Windows 10/11에 기본 내장!
+# 설치 확인
+winget --version
+
+# 프로그램 설치
+winget install OpenJS.NodeJS
+winget install Git.Git
+
+# 검색
+winget search 프로그램이름
+\`\`\`
+💡 winget이 없으면 Microsoft Store에서 "앱 설치 관리자" 업데이트 후 재시도!
 
 ### npm (Node.js 패키지 매니저) — 개발자 장비 창고
 \`\`\`bash
@@ -243,10 +283,10 @@ npm install -g typescript                   # 타입스크립트
 \`\`\``,
         quiz: [
           {
-            question: "Homebrew는 무엇인가요?",
-            options: ["커피 브랜드", "Mac용 패키지 매니저", "코드 에디터", "터미널 앱"],
+            question: "Mac에서 brew install git, Windows에서는 어떤 명령어로 Git을 설치하나요?",
+            options: ["apt-get install git", "winget install Git.Git", "pip install git", "npm install git"],
             correct: 1,
-            explanation: "Homebrew는 Mac에서 프로그램을 터미널로 쉽게 설치할 수 있는 패키지 매니저입니다!"
+            explanation: "Windows에서는 winget install Git.Git 으로 설치할 수 있어요. winget은 Windows 10/11에 기본 내장된 패키지 매니저입니다!"
           },
           {
             question: "npm install -g 의 -g 플래그는 무엇을 의미하나요?",
@@ -296,7 +336,8 @@ cat index.html   # 내용 확인
 
 ### 브라우저로 열어보기
 \`\`\`bash
-open index.html
+open index.html       # Mac
+start index.html      # Windows
 \`\`\`
 
 **🎉 축하해요!** 터미널로 첫 HTML 파일을 만들고 열었어요!
@@ -424,10 +465,18 @@ PORT=3000
 
 ### 환경변수 임시 설정
 \`\`\`bash
+# Mac/Linux
 export MY_NAME="홍길동"
 echo $MY_NAME    # 홍길동
 \`\`\`
-터미널을 닫으면 사라집니다. 영구 저장하려면 \`~/.zshrc\`에 추가!`,
+\`\`\`powershell
+# Windows PowerShell
+$env:MY_NAME = "홍길동"
+echo $env:MY_NAME    # 홍길동
+\`\`\`
+터미널을 닫으면 사라집니다. 영구 저장 방법:
+- **Mac:** \`~/.zshrc\` 파일에 \`export MY_NAME="홍길동"\` 추가
+- **Windows:** 시스템 속성 → 환경 변수 → 새로 만들기 (또는 PowerShell \`$PROFILE\` 파일에 추가)`,
         quiz: [
           {
             question: "API 키처럼 민감한 정보를 저장하는 올바른 방법은?",
@@ -442,10 +491,10 @@ echo $MY_NAME    # 홍길동
             explanation: "PATH는 터미널에서 명령어를 입력했을 때 실행 파일을 어느 폴더에서 찾을지 알려주는 목록이에요."
           },
           {
-            question: "export 명령어로 설정한 환경변수는?",
+            question: "export(Mac) 또는 $env:(Windows)로 설정한 환경변수는?",
             options: ["재부팅해도 유지된다", "현재 터미널 세션에서만 유효하다", "다른 컴퓨터에도 공유된다", ".env 파일에 자동 저장된다"],
             correct: 1,
-            explanation: "export로 설정한 환경변수는 현재 터미널 세션에서만 살아있어요. 영구 저장하려면 ~/.zshrc에 추가해야 합니다."
+            explanation: "export/$env: 로 설정한 환경변수는 현재 터미널 세션에서만 살아있어요. Mac은 ~/.zshrc에, Windows는 시스템 환경변수 설정 또는 $PROFILE 파일에 추가해야 영구 저장됩니다."
           }
         ]
       },
@@ -583,12 +632,18 @@ done
 
 ### 나만의 alias 모음
 \`\`\`bash
-# ~/.zshrc에 추가
+# Mac/Linux: ~/.zshrc에 추가
 alias gs='git status'
 alias gc='git commit -m'
 alias gp='git push'
 alias dev='npm run dev'
 alias deploy='git add . && git commit -m "update" && git push'
+\`\`\`
+\`\`\`powershell
+# Windows PowerShell: $PROFILE 파일에 추가 (notepad $PROFILE 로 열기)
+function gs { git status }
+function gp { git push }
+function dev { npm run dev }
 \`\`\`
 
 **터미널 마스터가 된 걸 축하해요! 🏔️**
@@ -647,8 +702,10 @@ git --version
 
 없으면 설치:
 \`\`\`bash
-brew install git
+brew install git          # Mac
+winget install Git.Git    # Windows
 \`\`\`
+Windows에서 git이 없으면 git-scm.com에서 직접 다운로드도 가능해요.
 
 ### 핵심 개념 3가지
 - **Repository (레포)**: 코드가 저장되는 폴더 (= 등산 로그북)
@@ -1187,10 +1244,13 @@ Claude: [코드 작성, 파일 생성, 설명까지 해줌]
 \`\`\`bash
 node --version
 # v18.0.0 이상이어야 해요
-
-# 버전이 낮으면 업데이트
-brew install node
 \`\`\`
+버전이 낮거나 없으면 설치:
+\`\`\`bash
+brew install node                   # Mac
+winget install OpenJS.NodeJS        # Windows
+\`\`\`
+또는 nodejs.org에서 LTS 버전 직접 다운로드 (Mac/Windows 모두 가능)
 
 ### 2. Claude Code 설치
 \`\`\`bash
@@ -1213,10 +1273,15 @@ claude
 
 ### API 키 입력 방법
 \`\`\`bash
-# 방법 1: 환경변수 설정 (추천)
+# Mac/Linux — 환경변수 설정 (추천)
 export ANTHROPIC_API_KEY=sk-ant-...
-
-# 방법 2: .env 파일
+\`\`\`
+\`\`\`powershell
+# Windows PowerShell — 환경변수 설정 (추천)
+$env:ANTHROPIC_API_KEY = "sk-ant-..."
+\`\`\`
+\`\`\`bash
+# Mac/Windows 모두 — .env 파일 방식
 echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
 \`\`\``,
         quiz: [
