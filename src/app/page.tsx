@@ -110,7 +110,7 @@ export default function HomePage() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <div className="flex items-center gap-2 flex-wrap mb-0.5">
                           <h3 className="text-white font-bold text-base">{mountain.name}</h3>
                           <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DIFFICULTY_COLOR[mountain.difficulty]}`}>
                             {mountain.difficulty}
@@ -121,6 +121,7 @@ export default function HomePage() {
                             </span>
                           )}
                         </div>
+                        <p className="text-indigo-300/60 text-xs italic mb-1">{mountain.subtitle}</p>
                         <p className="text-white/50 text-xs leading-relaxed mb-3">
                           {mountain.description}
                         </p>

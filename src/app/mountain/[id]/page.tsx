@@ -98,7 +98,8 @@ export default function MountainPage() {
               ← 산 목록으로
             </button>
             <div className="text-5xl mb-3">{mountain.emoji}</div>
-            <h1 className="text-3xl font-black text-white mb-2">{mountain.name}</h1>
+            <h1 className="text-3xl font-black text-white mb-1">{mountain.name}</h1>
+            <p className="text-white/50 text-sm italic mb-2">{mountain.subtitle}</p>
             <p className="text-white/80 mb-6 leading-relaxed text-sm">{mountain.description}</p>
             <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <div className="flex justify-between text-sm mb-2 text-white/80">
