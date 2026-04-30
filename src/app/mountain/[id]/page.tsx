@@ -257,7 +257,7 @@ export default function MountainPage() {
         {view === "content" && (
           <>
             <div
-              className="prose prose-invert prose-sm max-w-none bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-6 shadow-xl"
+              className="text-white/80 leading-relaxed max-w-none bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-6 shadow-xl"
               dangerouslySetInnerHTML={{ __html: renderMarkdown(activeStage.content) }}
             />
             <AskAI
