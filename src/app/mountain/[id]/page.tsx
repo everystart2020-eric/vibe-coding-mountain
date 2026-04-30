@@ -88,8 +88,14 @@ export default function MountainPage() {
         </div>
 
         {/* 헤더 */}
-        <div className={`relative bg-gradient-to-br ${mountain.color} opacity-90`}>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
+        <div className="relative overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-105"
+            style={{ backgroundImage: `url(${mountain.image})` }}
+          />
+          <div className="absolute inset-0 bg-slate-900/60" />
+          <div className={`absolute inset-0 bg-gradient-to-br ${mountain.color} opacity-30`} />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80" />
           <div className="relative max-w-2xl mx-auto px-4 py-10">
             <button
               onClick={() => router.push("/")}
@@ -221,8 +227,14 @@ export default function MountainPage() {
       </div>
 
       {/* 헤더 */}
-      <div className={`relative bg-gradient-to-br ${mountain.color}`}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
+      <div className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${mountain.image})` }}
+        />
+        <div className="absolute inset-0 bg-slate-900/65" />
+        <div className={`absolute inset-0 bg-gradient-to-br ${mountain.color} opacity-25`} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/70" />
         <div className="relative max-w-2xl mx-auto px-4 py-6">
           <button
             onClick={() => { setView("list"); setActiveStage(null) }}

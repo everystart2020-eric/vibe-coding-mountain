@@ -24,6 +24,7 @@ export type Mountain = {
   color: string
   bgColor: string
   elevation: number
+  image: string
   stages: Stage[]
 }
 
@@ -38,6 +39,7 @@ export const mountains: Mountain[] = [
     color: "from-green-400 to-emerald-600",
     bgColor: "bg-green-50",
     elevation: 632,
+    image: "https://images.unsplash.com/photo-1711917374645-07f6297af259?w=1200&q=80",
     stages: [
       {
         id: "what-is-terminal",
@@ -393,6 +395,7 @@ ls -la      # 숨김 파일 포함 모두 보기
     color: "from-orange-400 to-red-500",
     bgColor: "bg-orange-50",
     elevation: 836,
+    image: "https://images.unsplash.com/photo-1637070891585-02d98d6e96b1?w=1200&q=80",
     stages: [
       {
         id: "what-is-git",
@@ -692,6 +695,7 @@ git branch -d feature/새기능이름  # 완료된 브랜치 삭제
     color: "from-purple-400 to-violet-600",
     bgColor: "bg-purple-50",
     elevation: 1708,
+    image: "https://images.unsplash.com/photo-1700061291361-b8aa1f40abb8?w=1200&q=80",
     stages: [
       {
         id: "what-is-claude-code",
@@ -987,6 +991,7 @@ Claude: 이 에러는... [원인 + 해결책]
     color: "from-pink-400 to-rose-600",
     bgColor: "bg-pink-50",
     elevation: 1915,
+    image: "https://images.unsplash.com/photo-1740329289233-acf55a0fa187?w=1200&q=80",
     stages: [
       {
         id: "prompt-basics",
@@ -1299,6 +1304,7 @@ git push
     color: "from-blue-400 to-cyan-600",
     bgColor: "bg-blue-50",
     elevation: 1950,
+    image: "https://images.unsplash.com/photo-1637052298263-a18c4e2605ff?w=1200&q=80",
     stages: [
       {
         id: "project-planning",

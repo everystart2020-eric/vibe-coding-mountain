@@ -94,11 +94,18 @@ export default function HomePage() {
               <Link key={mountain.id} href={`/mountain/${mountain.id}`}>
                 <div className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer ${
                   isCompleted
-                    ? "border-yellow-400/40 bg-yellow-500/10 backdrop-blur-md"
-                    : "border-white/15 bg-white/8 backdrop-blur-md hover:bg-white/12 hover:border-white/25"
+                    ? "border-yellow-400/40"
+                    : "border-white/15 hover:border-white/30"
                 }`}>
-                  {/* 글로우 효과 */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${mountain.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                  {/* 산 배경 이미지 */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                    style={{ backgroundImage: `url(${mountain.image})` }}
+                  />
+                  {/* 어두운 오버레이 */}
+                  <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-[2px] group-hover:bg-slate-900/65 transition-colors" />
+                  {/* 그라디언트 글로우 */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${mountain.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
 
                   <div className="relative p-5">
                     <div className="flex items-start gap-4">
