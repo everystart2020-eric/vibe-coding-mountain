@@ -161,7 +161,28 @@ export default function HomePage() {
           })}
         </div>
 
-        <div className="mt-12 text-center text-white/20 text-xs space-y-1">
+        {/* 종합 테스트 */}
+        <div className="mt-8">
+          <Link href="/final-test">
+            <div className="group relative rounded-2xl border border-yellow-400/30 overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer hover:border-yellow-400/50">
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 group-hover:from-yellow-500/20 group-hover:to-orange-500/20 transition-all" />
+              <div className="relative p-5 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
+                  🏆
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-yellow-300 font-bold text-base mb-0.5">종합 등반 테스트</h3>
+                  <p className="text-white/50 text-xs leading-relaxed">5개 산 전체 내용을 총정리 · 20문제 · 헷갈리는 부분 분석 · PDF 보고서 저장</p>
+                </div>
+                <div className="text-yellow-400/50 group-hover:text-yellow-400 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
+                  →
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        <div className="mt-8 text-center text-white/20 text-xs space-y-1">
           <p>Claude Code + Next.js로 만든 바이브 코딩 학습 플랫폼</p>
           <p>진행 상황은 브라우저에 자동 저장됩니다</p>
         </div>
