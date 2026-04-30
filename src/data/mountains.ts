@@ -39,7 +39,7 @@ export const mountains: Mountain[] = [
     color: "from-green-400 to-emerald-600",
     bgColor: "bg-green-50",
     elevation: 632,
-    image: "https://images.unsplash.com/photo-1700061291361-b8aa1f40abb8?w=1200&q=80",
+    image: "https://images.unsplash.com/photo-1552190067-05168724cf89?w=1200&q=80",
     stages: [
       {
         id: "what-is-terminal",
