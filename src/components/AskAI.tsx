@@ -39,7 +39,7 @@ export default function AskAI({ mountainName, stageName, stageContent }: Props) 
         onClick={() => setOpen(true)}
         className="mt-5 w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-dashed border-indigo-400/30 text-indigo-300/70 hover:text-indigo-200 hover:border-indigo-400/50 hover:bg-indigo-500/10 transition-all font-medium text-sm backdrop-blur-sm"
       >
-        🤔 모르는 게 있나요? AI 강사에게 질문하기
+        🤔 모르는 게 있나요? AI-Eric 강사에게 질문하기
       </button>
     )
   }
@@ -48,7 +48,7 @@ export default function AskAI({ mountainName, stageName, stageContent }: Props) 
     <div className="mt-5 rounded-2xl border border-indigo-400/20 bg-indigo-500/10 backdrop-blur-md p-5 shadow-xl">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-bold text-indigo-200 flex items-center gap-2 text-sm">
-          🤖 AI 강사에게 질문하기
+          🤖 AI-Eric 강사에게 질문하기
         </h3>
         <button
           onClick={() => { setOpen(false); setAnswer(""); setQuestion("") }}
@@ -82,7 +82,7 @@ export default function AskAI({ mountainName, stageName, stageContent }: Props) 
 
       {answer && (
         <div className="mt-4 rounded-xl bg-white/5 border border-white/10 p-4 text-sm text-white/80 whitespace-pre-wrap leading-relaxed">
-          <span className="font-semibold text-indigo-300">AI 강사: </span>
+          <span className="font-semibold text-indigo-300">AI-Eric 강사: </span>
           {answer}
         </div>
       )}
