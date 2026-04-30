@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { USER_STORAGE_KEY } from "@/components/Onboarding"
 
 type Props = {
   mountainName: string
@@ -19,10 +20,16 @@ export default function AskAI({ mountainName, stageName, stageContent }: Props) 
     setLoading(true)
     setAnswer("")
     try {
+      let userName = ""
+      try {
+        const raw = localStorage.getItem(USER_STORAGE_KEY)
+        if (raw) userName = JSON.parse(raw)?.name ?? ""
+      } catch { /* ignore */ }
+
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: question, mountainName, stageName, stageContent })
+        body: JSON.stringify({ message: question, mountainName, stageName, stageContent, userName })
       })
       const data = await res.json()
       setAnswer(data.answer || "답변을 가져오지 못했어요. 다시 시도해주세요.")

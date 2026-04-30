@@ -5,14 +5,19 @@ const client = new Anthropic()
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { message, mountainName, stageName, stageContent } = body
+  const { message, mountainName, stageName, stageContent, userName } = body
 
   if (!message || typeof message !== "string") {
     return NextResponse.json({ error: "message is required" }, { status: 400 })
   }
 
-  const systemPrompt = `당신은 "바이브 코딩 산악 학교"의 친절한 강사입니다.
+  const nameInstruction = userName
+    ? `학생의 이름은 "${userName}"입니다. 답변할 때 자연스럽게 "${userName}님"이라고 이름을 불러주세요.`
+    : ""
+
+  const systemPrompt = `당신은 "바이브 코딩 산악 학교"의 친절한 강사 AI-Eric입니다.
 현재 학생은 "${mountainName}" 과정의 "${stageName}" 단계를 공부하고 있습니다.
+${nameInstruction}
 
 현재 학습 중인 내용:
 ${stageContent}

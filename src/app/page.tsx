@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { mountains } from "@/data/mountains"
+import Onboarding, { UserProfile, USER_STORAGE_KEY } from "@/components/Onboarding"
 
 const STORAGE_KEY = "vibe-progress"
 
@@ -15,6 +16,7 @@ const DIFFICULTY_COLOR: Record<string, string> = {
 
 export default function HomePage() {
   const [completed, setCompleted] = useState<Set<string>>(new Set())
+  const [user, setUser] = useState<UserProfile | null | undefined>(undefined)
 
   useEffect(() => {
     try {
@@ -23,7 +25,16 @@ export default function HomePage() {
     } catch {
       setCompleted(new Set())
     }
+    try {
+      const raw = localStorage.getItem(USER_STORAGE_KEY)
+      setUser(raw ? JSON.parse(raw) : null)
+    } catch {
+      setUser(null)
+    }
   }, [])
+
+  if (user === undefined) return null
+  if (user === null) return <Onboarding onComplete={(profile) => setUser(profile)} />
 
   const totalStages = mountains.reduce((acc, m) => acc + m.stages.length, 0)
   const doneStages = mountains.reduce(
@@ -56,6 +67,19 @@ export default function HomePage() {
           <p className="text-indigo-400/70 text-sm mt-2">
             Claude Code로 터미널에서 AI와 함께 코딩하는 법을 배워보세요
           </p>
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/15 text-sm text-white/70">
+            <span>👤</span>
+            <span className="font-semibold text-white/90">{user.name}</span>
+            <span className="text-white/30">·</span>
+            <span>{user.age}세</span>
+            <button
+              onClick={() => { localStorage.removeItem(USER_STORAGE_KEY); setUser(null) }}
+              className="ml-1 text-white/25 hover:text-white/50 text-xs transition-colors"
+              title="프로필 초기화"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* 전체 진행률 */}
