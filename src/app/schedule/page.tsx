@@ -33,19 +33,26 @@ export default function SchedulePage() {
   const [myVotes, setMyVotes] = useState<Record<number, string>>({})
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState<number | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const fetchVotes = useCallback(async (currentName: string) => {
     setLoading(true)
-    const res = await fetch("/api/votes")
-    const data = await res.json()
-    const votes: VoteRecord[] = data.votes ?? []
-    setCounts(buildCounts(votes))
-    const mine: Record<number, string> = {}
-    for (const v of votes) {
-      if (v.name === currentName) mine[v.week] = v.time_slot
+    try {
+      const res = await fetch("/api/votes")
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? "투표 불러오기 실패")
+      const votes: VoteRecord[] = data.votes ?? []
+      setCounts(buildCounts(votes))
+      const mine: Record<number, string> = {}
+      for (const v of votes) {
+        if (v.name === currentName) mine[v.week] = v.time_slot
+      }
+      setMyVotes(mine)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "오류가 발생했습니다")
+    } finally {
+      setLoading(false)
     }
-    setMyVotes(mine)
-    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -68,14 +75,22 @@ export default function SchedulePage() {
 
   async function vote(week: number, slot: string) {
     if (!name || submitting !== null) return
+    setError(null)
     setSubmitting(week)
-    await fetch("/api/votes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, week, time_slot: slot }),
-    })
-    await fetchVotes(name)
-    setSubmitting(null)
+    try {
+      const res = await fetch("/api/votes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, week, time_slot: slot }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? "투표 저장 실패")
+      await fetchVotes(name)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "투표 중 오류가 발생했습니다")
+    } finally {
+      setSubmitting(null)
+    }
   }
 
   function resetName() {
@@ -227,6 +242,12 @@ export default function SchedulePage() {
 
         {loading && (
           <div className="text-center text-white/30 text-sm mb-6">불러오는 중...</div>
+        )}
+
+        {error && (
+          <div className="mb-6 rounded-2xl bg-red-500/15 border border-red-400/30 p-4 text-red-300 text-sm">
+            ⚠️ {error}
+          </div>
         )}
 
         <div className="rounded-2xl bg-indigo-500/10 border border-indigo-400/20 p-5 mb-8">
