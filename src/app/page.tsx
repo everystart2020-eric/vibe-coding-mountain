@@ -229,6 +229,27 @@ export default function HomePage() {
           </Link>
         </div>
 
+        {/* 오프라인 일정 */}
+        <div className="mt-6">
+          <Link href="/schedule">
+            <div className="group relative rounded-2xl border border-indigo-400/25 overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer hover:border-indigo-400/45">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-all" />
+              <div className="relative p-5 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
+                  📅
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-indigo-300 font-bold text-base mb-0.5">오프라인 일정 확인</h3>
+                  <p className="text-white/50 text-xs leading-relaxed">5월 매주 토요일 · 링키영어 본사카페 1층 · 시간 선택 가능</p>
+                </div>
+                <div className="text-indigo-400/50 group-hover:text-indigo-400 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
+                  →
+                </div>
+              </div>
+            </div>
+          </Link>
+        </div>
+
         <div className="mt-8 text-center text-white/20 text-xs space-y-1">
           <p>Claude Code + Next.js로 만든 바이브 코딩 학습 플랫폼</p>
           <p>진행 상황은 브라우저에 자동 저장됩니다</p>
