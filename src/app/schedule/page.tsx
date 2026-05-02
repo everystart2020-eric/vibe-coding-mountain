@@ -318,7 +318,6 @@ export default function SchedulePage() {
           <ul className="space-y-1.5 text-white/60 text-sm">
             <li>· 이미 투표한 경우 다시 선택하면 변경됩니다</li>
             <li>· 노트북을 지참해주세요</li>
-            <li>· 사전 온라인 학습 후 오프라인 실습을 진행합니다</li>
           </ul>
         </div>
 
