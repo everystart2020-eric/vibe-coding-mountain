@@ -34,6 +34,9 @@ export default function SchedulePage() {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [customSlots, setCustomSlots] = useState<Record<number, string[]>>({})
+  const [addingSlot, setAddingSlot] = useState<number | null>(null)
+  const [newSlotInput, setNewSlotInput] = useState("")
 
   const fetchVotes = useCallback(async (currentName: string) => {
     setLoading(true)
@@ -48,6 +51,12 @@ export default function SchedulePage() {
         if (v.name === currentName) mine[v.week] = v.time_slot
       }
       setMyVotes(mine)
+      const slotMap: Record<number, string[]> = {}
+      for (const s of data.customSlots ?? []) {
+        if (!slotMap[s.week]) slotMap[s.week] = []
+        slotMap[s.week].push(s.slot)
+      }
+      setCustomSlots(slotMap)
     } catch (e) {
       setError(e instanceof Error ? e.message : "오류가 발생했습니다")
     } finally {
@@ -71,6 +80,25 @@ export default function SchedulePage() {
     setName(trimmed)
     setNameSaved(true)
     fetchVotes(trimmed)
+  }
+
+  async function addSlot(week: number) {
+    const slot = newSlotInput.trim()
+    if (!slot) return
+    try {
+      const res = await fetch("/api/slots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ week, slot }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? "시간 추가 실패")
+      setNewSlotInput("")
+      setAddingSlot(null)
+      await fetchVotes(name)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "시간 추가 중 오류가 발생했습니다")
+    }
   }
 
   async function vote(week: number, slot: string) {
@@ -189,7 +217,7 @@ export default function SchedulePage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  {w.slots.map((slot) => {
+                  {[...w.slots, ...(customSlots[w.week] ?? [])].map((slot) => {
                     const voters = weekCounts[slot] ?? []
                     const count = voters.length
                     const isMyVote = mySlot === slot
@@ -235,6 +263,41 @@ export default function SchedulePage() {
                     )
                   })}
                 </div>
+
+                {/* 시간 추가 */}
+                {addingSlot === w.week ? (
+                  <div className="flex gap-2 mt-2">
+                    <input
+                      type="text"
+                      value={newSlotInput}
+                      onChange={(e) => setNewSlotInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && addSlot(w.week)}
+                      placeholder="예: 오후 3:00"
+                      autoFocus
+                      className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/30 text-sm focus:outline-none focus:border-indigo-400/60"
+                    />
+                    <button
+                      onClick={() => addSlot(w.week)}
+                      disabled={!newSlotInput.trim()}
+                      className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
+                    >
+                      추가
+                    </button>
+                    <button
+                      onClick={() => { setAddingSlot(null); setNewSlotInput("") }}
+                      className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/60 text-sm transition-colors"
+                    >
+                      취소
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setAddingSlot(w.week)}
+                    className="mt-2 w-full text-center text-white/30 hover:text-white/60 text-xs py-1.5 rounded-xl border border-dashed border-white/10 hover:border-white/25 transition-colors"
+                  >
+                    + 시간 추가
+                  </button>
+                )}
               </div>
             )
           })}

@@ -2,15 +2,19 @@ import { NextRequest, NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 
 export async function GET() {
-  const { data, error } = await supabase
-    .from("votes")
-    .select("week, time_slot, name")
+  const [votesResult, slotsResult] = await Promise.all([
+    supabase.from("votes").select("week, time_slot, name"),
+    supabase.from("custom_slots").select("week, slot"),
+  ])
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  if (votesResult.error) {
+    return NextResponse.json({ error: votesResult.error.message }, { status: 500 })
   }
 
-  return NextResponse.json({ votes: data })
+  return NextResponse.json({
+    votes: votesResult.data,
+    customSlots: slotsResult.data ?? [],
+  })
 }
 
 export async function POST(req: NextRequest) {
