@@ -115,7 +115,29 @@ export default function HomePage() {
             const isCompleted = mountainProgress === 100
 
             return (
-              <Link key={mountain.id} href={`/mountain/${mountain.id}`}>
+              <div key={mountain.id}>
+                {idx === 0 && (
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex-1 h-px bg-white/10" />
+                    <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-400/25">
+                      <span className="text-lg">🤖</span>
+                      <span className="text-indigo-300 text-xs font-semibold tracking-wide">Claude Code 과정</span>
+                    </div>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+                )}
+                {mountain.id === "lovable" && (
+                  <div className="flex items-center gap-3 my-4">
+                    <div className="flex-1 h-px bg-white/10" />
+                    <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/15 border border-violet-400/25">
+                      <span className="text-lg">💜</span>
+                      <span className="text-violet-300 text-xs font-semibold tracking-wide">Lovable 과정</span>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full bg-violet-400/20 text-violet-300 border border-violet-400/20 font-medium">NEW</span>
+                    </div>
+                    <div className="flex-1 h-px bg-white/10" />
+                  </div>
+                )}
+                <Link href={`/mountain/${mountain.id}`}>
                 <div className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer ${
                   isCompleted
                     ? "border-yellow-400/40"
@@ -181,6 +203,7 @@ export default function HomePage() {
                   </div>
                 </div>
               </Link>
+              </div>
             )
           })}
         </div>
