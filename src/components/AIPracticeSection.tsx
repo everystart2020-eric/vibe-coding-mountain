@@ -25,6 +25,8 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [aiFeedback, setAiFeedback] = useState<string | null>(null)
+  const [feedbackLoading, setFeedbackLoading] = useState(false)
 
   const fetchEntries = useCallback(async (currentName: string) => {
     setLoading(true)
@@ -88,11 +90,35 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
       if (!res.ok) throw new Error(data.error ?? "저장 실패")
       setSaved(true)
       await fetchEntries(name)
+      fetchAIFeedback(text)
     } catch (e) {
       setError(e instanceof Error ? e.message : "저장 중 오류가 발생했습니다")
       setSaved(true)
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function fetchAIFeedback(userText: string) {
+    setFeedbackLoading(true)
+    setAiFeedback(null)
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: `학생이 AI 실습 후 다음과 같이 기록했습니다:\n\n"${userText}"\n\n실습 과제: ${practice.task}\n\n이 기록을 읽고, 잘 파악한 점을 칭찬하고 한 가지 더 생각해볼 점을 짧게 알려주세요. 2-3문장으로 간결하게.`,
+          mountainName: mountainId,
+          stageName: stageId,
+          stageContent: practice.task,
+        }),
+      })
+      const data = await res.json()
+      if (res.ok) setAiFeedback(data.answer ?? null)
+    } catch {
+      // feedback is optional — silently ignore
+    } finally {
+      setFeedbackLoading(false)
     }
   }
 
@@ -169,6 +195,20 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
           className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 text-white/80 placeholder-white/25 text-sm focus:outline-none focus:border-indigo-400/50 resize-none leading-relaxed"
         />
         {error && <p className="text-red-400 text-xs mt-2">⚠️ {error}</p>}
+
+        {feedbackLoading && (
+          <div className="mt-4 rounded-xl bg-indigo-500/10 border border-indigo-400/20 p-4">
+            <p className="text-indigo-300 text-xs animate-pulse">AI가 피드백을 작성하는 중...</p>
+          </div>
+        )}
+
+        {aiFeedback && !feedbackLoading && (
+          <div className="mt-4 rounded-xl bg-indigo-500/10 border border-indigo-400/20 p-4">
+            <p className="text-indigo-300 text-xs font-semibold mb-2">AI 피드백</p>
+            <p className="text-white/75 text-sm leading-relaxed whitespace-pre-wrap">{aiFeedback}</p>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mt-3">
           <span className="text-white/25 text-xs">
             {saved ? "✓ 저장됨" : text.trim() ? "저장되지 않음" : ""}
