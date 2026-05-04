@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation"
 import { mountains, Stage } from "@/data/mountains"
 import QuizSection from "@/components/QuizSection"
 import AskAI from "@/components/AskAI"
+import AIPracticeSection from "@/components/AIPracticeSection"
+import { aiPractices } from "@/data/aiPractices"
 
 const STORAGE_KEY = "vibe-progress"
 
@@ -22,7 +24,7 @@ function saveProgress(completed: Set<string>) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...completed]))
 }
 
-type View = "list" | "content" | "quiz"
+type View = "list" | "content" | "quiz" | "practice"
 
 export default function MountainPage() {
   const { id } = useParams<{ id: string }>()
@@ -57,6 +59,17 @@ export default function MountainPage() {
   }
 
   function handleQuizComplete() {
+    if (!activeStage) return
+    const practice = aiPractices[`${mountain!.id}-${activeStage.id}`]
+    if (practice) {
+      setView("practice")
+    } else {
+      advanceStage()
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
+
+  function advanceStage() {
     if (!activeStage) return
     const next = new Set(completed)
     next.add(activeStage.id)
@@ -297,6 +310,19 @@ export default function MountainPage() {
             />
           </>
         )}
+
+        {view === "practice" && (() => {
+          const practice = aiPractices[`${mountain.id}-${activeStage.id}`]
+          if (!practice) return null
+          return (
+            <AIPracticeSection
+              mountainId={mountain.id}
+              stageId={activeStage.id}
+              practice={practice}
+              onComplete={advanceStage}
+            />
+          )
+        })()}
       </div>
     </div>
   )
