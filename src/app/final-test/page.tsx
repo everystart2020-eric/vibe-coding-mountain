@@ -269,12 +269,12 @@ export default function FinalTestPage() {
 
   const grade =
     pct >= 90
-      ? { label: "정상 정복! 🏆", color: "text-yellow-300", bg: "bg-yellow-400/20 border-yellow-400/30" }
+      ? { label: "정상 정복! 🏆", color: "text-yellow-700", bg: "bg-yellow-100 border-yellow-300" }
       : pct >= 70
-      ? { label: "8부 능선 도달 🌄", color: "text-emerald-300", bg: "bg-emerald-400/20 border-emerald-400/30" }
+      ? { label: "8부 능선 도달 🌄", color: "text-emerald-700", bg: "bg-emerald-100 border-emerald-300" }
       : pct >= 50
-      ? { label: "중간 베이스캠프 ⛺", color: "text-blue-300", bg: "bg-blue-400/20 border-blue-400/30" }
-      : { label: "재도전 권장 💪", color: "text-orange-300", bg: "bg-orange-400/20 border-orange-400/30" }
+      ? { label: "중간 베이스캠프 ⛺", color: "text-blue-700", bg: "bg-blue-100 border-blue-300" }
+      : { label: "재도전 권장 💪", color: "text-orange-700", bg: "bg-orange-100 border-orange-300" }
 
   const mountainStats = MOUNTAIN_ORDER.map((mid) => {
     const qs = QUESTIONS.filter((q) => q.mountainId === mid)
@@ -308,12 +308,12 @@ export default function FinalTestPage() {
   // ── 인트로 화면 ───────────────────────────────────────────
   if (view === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
         <div className="max-w-lg w-full">
           <div className="text-center mb-8">
             <div className="text-6xl mb-4">📋</div>
-            <h1 className="text-3xl font-black text-white mb-2">바이브 코딩 종합 테스트</h1>
-            <p className="text-indigo-300 text-sm leading-relaxed">
+            <h1 className="text-3xl font-black text-gray-900 mb-2">바이브 코딩 종합 테스트</h1>
+            <p className="text-emerald-700 text-sm leading-relaxed">
               5개 산, 20문제로 배운 내용을 점검합니다.<br />
               정답은 마지막에 한번에 확인할 수 있어요.
             </p>
@@ -325,12 +325,12 @@ export default function FinalTestPage() {
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${m.color} flex items-center justify-center text-lg mx-auto mb-1`}>
                   {m.emoji}
                 </div>
-                <p className="text-white/40 text-xs">{m.total}문항</p>
+                <p className="text-gray-400 text-xs">{m.total}문항</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 text-sm text-white/60 space-y-1">
+          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-4 mb-6 text-sm text-gray-500 space-y-1">
             <p>📌 문항 수: 총 {total}문제 (산별 4문제)</p>
             <p>⏱️ 예상 소요 시간: 10~15분</p>
             <p>📝 정답은 모든 문제 풀고 난 후 한번에 확인</p>
@@ -339,13 +339,13 @@ export default function FinalTestPage() {
 
           <button
             onClick={() => setView("test")}
-            className="w-full py-4 rounded-xl font-black text-white text-lg bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition-opacity shadow-lg"
+            className="w-full py-4 rounded-xl font-black text-white text-lg bg-emerald-700 hover:bg-emerald-600 transition-colors shadow-sm"
           >
             테스트 시작하기 →
           </button>
           <button
             onClick={() => router.push("/")}
-            className="mt-3 w-full py-3 rounded-xl text-white/40 hover:text-white/60 text-sm transition-colors"
+            className="mt-3 w-full py-3 rounded-xl text-gray-400 hover:text-gray-600 text-sm transition-colors"
           >
             ← 홈으로 돌아가기
           </button>
@@ -360,25 +360,25 @@ export default function FinalTestPage() {
     const progressPct = Math.round((current / total) * 100)
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 p-4">
+      <div className="min-h-screen bg-stone-50 p-4">
         <div className="max-w-lg mx-auto pt-6">
           <div className="mb-6">
-            <div className="flex justify-between text-xs text-white/50 mb-2">
+            <div className="flex justify-between text-xs text-gray-500 mb-2">
               <span>{current + 1} / {total} 문제</span>
               <span className={`px-2 py-0.5 rounded-full bg-gradient-to-r ${q.color} text-white text-xs`}>
                 {q.emoji} {q.mountain}
               </span>
             </div>
-            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-indigo-400 to-purple-400 rounded-full transition-all duration-500"
+                className="h-full bg-emerald-600 rounded-full transition-all duration-500"
                 style={{ width: `${progressPct}%` }}
               />
             </div>
           </div>
 
-          <div className="bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-6 mb-4">
-            <p className="text-white font-bold text-base leading-relaxed">{q.question}</p>
+          <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6 mb-4">
+            <p className="text-gray-800 font-bold text-base leading-relaxed">{q.question}</p>
           </div>
 
           <div className="flex flex-col gap-2 mb-4">
@@ -390,11 +390,11 @@ export default function FinalTestPage() {
                   onClick={() => setSelected(i)}
                   className={`text-left px-4 py-3 rounded-xl border text-sm transition-all duration-200 ${
                     isSelected
-                      ? "border-indigo-400/60 bg-indigo-500/20 text-indigo-200"
-                      : "border-white/15 bg-white/5 text-white/80 hover:border-white/30 hover:bg-white/10"
+                      ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                      : "border-gray-200 bg-white text-gray-700 hover:border-emerald-300 hover:bg-emerald-50"
                   }`}
                 >
-                  <span className="text-white/40 mr-2 font-mono">{String.fromCharCode(65 + i)}.</span>
+                  <span className="text-gray-400 mr-2 font-mono">{String.fromCharCode(65 + i)}.</span>
                   {opt}
                 </button>
               )
@@ -404,7 +404,7 @@ export default function FinalTestPage() {
           <button
             onClick={handleNext}
             disabled={selected === null}
-            className="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 disabled:opacity-30 hover:opacity-90 transition-opacity"
+            className="w-full py-3 rounded-xl font-bold text-white bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 transition-colors"
           >
             {current + 1 >= total ? "결과 보기 →" : "다음 문제 →"}
           </button>
@@ -419,30 +419,30 @@ export default function FinalTestPage() {
       <style>{`
         @media print {
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          body { background: #0f172a !important; margin: 0; padding: 0; }
+          body { background: white !important; margin: 0; padding: 0; }
           .no-print { display: none !important; }
           .result-wrap { padding: 16px !important; }
           .result-card { break-inside: avoid; page-break-inside: avoid; }
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 result-wrap">
+      <div className="min-h-screen bg-stone-50 result-wrap">
         <div className="max-w-2xl mx-auto px-4 py-8">
 
           {/* 헤더 + 점수 */}
-          <div className="text-center mb-6 result-card bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-6">
+          <div className="text-center mb-6 result-card bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
             <div className="text-4xl mb-2">📋</div>
-            <h1 className="text-2xl font-black text-white mb-1">바이브 코딩 산악 학교</h1>
-            <p className="text-white/40 text-xs mb-1">종합 학습 테스트 결과 보고서</p>
-            <p className="text-white/25 text-xs mb-5">
+            <h1 className="text-2xl font-black text-gray-900 mb-1">바이브 코딩 산악 학교</h1>
+            <p className="text-gray-400 text-xs mb-1">종합 학습 테스트 결과 보고서</p>
+            <p className="text-gray-300 text-xs mb-5">
               {new Date().toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}
             </p>
 
-            <div className="inline-block bg-white/10 border border-white/20 rounded-2xl px-10 py-4 mb-4">
-              <p className="text-5xl font-black text-white">
-                {score}<span className="text-2xl text-white/40">/{total}</span>
+            <div className="inline-block bg-gray-50 border border-gray-200 rounded-2xl px-10 py-4 mb-4">
+              <p className="text-5xl font-black text-gray-900">
+                {score}<span className="text-2xl text-gray-400">/{total}</span>
               </p>
-              <p className="text-white/50 text-sm mt-1">{pct}점</p>
+              <p className="text-gray-500 text-sm mt-1">{pct}점</p>
             </div>
 
             <div className={`inline-flex px-5 py-2 rounded-full border text-sm font-bold ${grade.bg} ${grade.color}`}>
@@ -451,20 +451,20 @@ export default function FinalTestPage() {
           </div>
 
           {/* 산별 결과 */}
-          <div className="mb-5 result-card bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-5">
-            <h2 className="text-white font-bold text-sm mb-4">📊 산별 결과</h2>
+          <div className="mb-5 result-card bg-white border border-gray-200 shadow-sm rounded-2xl p-5">
+            <h2 className="text-gray-800 font-bold text-sm mb-4">📊 산별 결과</h2>
             <div className="flex flex-col gap-3">
               {mountainStats.map((m) => {
                 const mpct = Math.round((m.correct / m.total) * 100)
                 return (
                   <div key={m.id}>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-white/80 text-sm">{m.emoji} {m.name}</span>
-                      <span className={`text-xs font-mono font-bold ${mpct === 100 ? "text-emerald-300" : mpct >= 75 ? "text-blue-300" : "text-orange-300"}`}>
+                      <span className="text-gray-700 text-sm">{m.emoji} {m.name}</span>
+                      <span className={`text-xs font-mono font-bold ${mpct === 100 ? "text-emerald-600" : mpct >= 75 ? "text-blue-600" : "text-orange-600"}`}>
                         {m.correct}/{m.total} ({mpct}%)
                       </span>
                     </div>
-                    <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div
                         className={`h-full bg-gradient-to-r ${m.color} rounded-full`}
                         style={{ width: `${mpct}%` }}
@@ -477,8 +477,8 @@ export default function FinalTestPage() {
           </div>
 
           {/* 전체 문제 정답 확인 */}
-          <div className="mb-5 result-card bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-5">
-            <h2 className="text-white font-bold text-sm mb-4">📝 전체 문제 정답 확인</h2>
+          <div className="mb-5 result-card bg-white border border-gray-200 shadow-sm rounded-2xl p-5">
+            <h2 className="text-gray-800 font-bold text-sm mb-4">📝 전체 문제 정답 확인</h2>
             <div className="flex flex-col gap-3">
               {QUESTIONS.map((q, i) => {
                 const myAnswer = answers[i]
@@ -488,37 +488,37 @@ export default function FinalTestPage() {
                     key={i}
                     className={`result-card rounded-xl p-4 border ${
                       isCorrect
-                        ? "bg-emerald-500/10 border-emerald-400/20"
-                        : "bg-red-500/10 border-red-400/20"
+                        ? "bg-emerald-50 border-emerald-200"
+                        : "bg-red-50 border-red-200"
                     }`}
                   >
                     <div className="flex items-start gap-2 mb-2">
-                      <span className={`text-xs font-bold flex-shrink-0 mt-0.5 ${isCorrect ? "text-emerald-400" : "text-red-400"}`}>
+                      <span className={`text-xs font-bold flex-shrink-0 mt-0.5 ${isCorrect ? "text-emerald-600" : "text-red-500"}`}>
                         {isCorrect ? "✓" : "✗"} Q{i + 1}.
                       </span>
-                      <p className="text-white/90 text-sm font-medium leading-relaxed">{q.question}</p>
+                      <p className="text-gray-800 text-sm font-medium leading-relaxed">{q.question}</p>
                     </div>
 
                     <div className="flex flex-col gap-1 ml-6 mb-2">
                       {q.options.map((opt, j) => {
                         const isMyPick = myAnswer === j
                         const isRightAnswer = j === q.correct
-                        let style = "text-white/30"
-                        if (isRightAnswer) style = "text-emerald-300 font-semibold"
-                        else if (isMyPick && !isCorrect) style = "text-red-300 line-through"
+                        let style = "text-gray-300"
+                        if (isRightAnswer) style = "text-emerald-700 font-semibold"
+                        else if (isMyPick && !isCorrect) style = "text-red-500 line-through"
                         return (
                           <p key={j} className={`text-xs ${style}`}>
                             <span className="font-mono mr-1">{String.fromCharCode(65 + j)}.</span>
                             {opt}
-                            {isRightAnswer && <span className="ml-1 text-emerald-400">← 정답</span>}
-                            {isMyPick && !isCorrect && <span className="ml-1 text-red-400">← 내 답</span>}
+                            {isRightAnswer && <span className="ml-1 text-emerald-600">← 정답</span>}
+                            {isMyPick && !isCorrect && <span className="ml-1 text-red-500">← 내 답</span>}
                           </p>
                         )
                       })}
                     </div>
 
                     {!isCorrect && (
-                      <p className="ml-6 text-white/55 text-xs leading-relaxed border-t border-white/10 pt-2">
+                      <p className="ml-6 text-gray-500 text-xs leading-relaxed border-t border-gray-200 pt-2">
                         💡 {q.explanation}
                       </p>
                     )}
@@ -529,19 +529,19 @@ export default function FinalTestPage() {
           </div>
 
           {/* 핵심 포인트 */}
-          <div className="mb-6 result-card bg-indigo-500/10 backdrop-blur-md rounded-2xl border border-indigo-400/20 p-5">
-            <h2 className="text-indigo-200 font-bold text-sm mb-4">⭐ 꼭 기억해야 할 핵심 포인트</h2>
+          <div className="mb-6 result-card bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+            <h2 className="text-emerald-700 font-bold text-sm mb-4">⭐ 꼭 기억해야 할 핵심 포인트</h2>
             <div className="flex flex-col gap-3">
               {mountainStats.map((m) => {
                 const qs = QUESTIONS.filter((q) => q.mountainId === m.id)
                 const uniqueKeyPoints = [...new Set(qs.map((q) => q.keyPoint))]
                 return (
-                  <div key={m.id} className="result-card bg-white/5 rounded-xl p-3 border border-white/10">
-                    <p className="text-white/70 text-xs font-bold mb-2">{m.emoji} {m.name}</p>
+                  <div key={m.id} className="result-card bg-white rounded-xl p-3 border border-emerald-100 shadow-sm">
+                    <p className="text-gray-700 text-xs font-bold mb-2">{m.emoji} {m.name}</p>
                     <ul className="flex flex-col gap-1.5">
                       {uniqueKeyPoints.map((kp, i) => (
-                        <li key={i} className="text-xs text-white/60 flex gap-2">
-                          <span className="text-indigo-400 flex-shrink-0 mt-0.5">•</span>
+                        <li key={i} className="text-xs text-gray-600 flex gap-2">
+                          <span className="text-emerald-600 flex-shrink-0 mt-0.5">•</span>
                           <span className="leading-relaxed">{kp}</span>
                         </li>
                       ))}
@@ -556,19 +556,19 @@ export default function FinalTestPage() {
           <div className="no-print flex flex-col gap-3">
             <button
               onClick={() => window.print()}
-              className="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition-opacity shadow-lg text-base"
+              className="w-full py-4 rounded-xl font-bold text-white bg-emerald-700 hover:bg-emerald-600 transition-colors shadow-sm text-base"
             >
               📄 PDF로 저장하기
             </button>
             <button
               onClick={handleReset}
-              className="w-full py-3 rounded-xl font-medium text-white/60 border border-white/15 hover:text-white/80 hover:border-white/25 transition-all text-sm"
+              className="w-full py-3 rounded-xl font-medium text-gray-600 border border-gray-200 hover:text-gray-800 hover:border-gray-300 transition-all text-sm bg-white"
             >
               🔄 다시 테스트하기
             </button>
             <button
               onClick={() => router.push("/")}
-              className="w-full py-3 rounded-xl text-white/40 hover:text-white/60 text-sm transition-colors"
+              className="w-full py-3 rounded-xl text-gray-400 hover:text-gray-600 text-sm transition-colors"
             >
               ← 홈으로 돌아가기
             </button>

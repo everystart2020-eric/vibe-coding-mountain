@@ -130,40 +130,40 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 relative overflow-hidden">
+    <div className="min-h-screen bg-stone-50 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-emerald-100 rounded-full blur-3xl opacity-70" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-green-100 rounded-full blur-3xl opacity-70" />
       </div>
 
       <div className="relative max-w-2xl mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-white/40 hover:text-white/70 text-sm mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 text-sm mb-8 transition-colors">
           ← 홈으로
         </Link>
 
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-4xl mb-5 shadow-xl">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white border border-gray-200 shadow-lg text-4xl mb-5">
             📅
           </div>
-          <h1 className="text-3xl font-black text-white mb-2 tracking-tight">오프라인 일정 투표</h1>
-          <p className="text-indigo-300 text-sm">바이브 코딩 산악학교 · 2025년 5월</p>
+          <h1 className="text-3xl font-black text-gray-900 mb-2 tracking-tight">오프라인 일정 투표</h1>
+          <p className="text-gray-500 text-sm">바이브 코딩 산악학교 · 2025년 5월</p>
         </div>
 
         {/* 장소 */}
-        <div className="mb-6 rounded-2xl bg-white/8 border border-white/15 p-4 flex items-center gap-3">
+        <div className="mb-6 rounded-2xl bg-white border border-gray-200 shadow-sm p-4 flex items-center gap-3">
           <span className="text-2xl">📍</span>
           <div>
-            <p className="text-white/40 text-xs uppercase tracking-widest">장소</p>
-            <p className="text-white font-bold">링키영어 본사카페 1층</p>
+            <p className="text-gray-400 text-xs uppercase tracking-widest">장소</p>
+            <p className="text-gray-800 font-bold">링키영어 본사카페 1층</p>
           </div>
         </div>
 
         {/* 이름 입력 */}
         {!nameSaved ? (
-          <div className="mb-8 rounded-2xl bg-white/8 border border-white/15 p-5">
-            <p className="text-white font-semibold mb-1">참가자 이름 입력</p>
-            <p className="text-white/40 text-xs mb-4">이름을 입력하면 원하는 시간대에 투표할 수 있습니다</p>
+          <div className="mb-8 rounded-2xl bg-white border border-gray-200 p-5">
+            <p className="text-gray-800 font-semibold mb-1">참가자 이름 입력</p>
+            <p className="text-gray-400 text-xs mb-4">이름을 입력하면 원하는 시간대에 투표할 수 있습니다</p>
             <div className="flex gap-2">
               <input
                 type="text"
@@ -171,25 +171,25 @@ export default function SchedulePage() {
                 onChange={(e) => setNameInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && saveName()}
                 placeholder="이름 입력"
-                className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder-white/30 text-sm focus:outline-none focus:border-indigo-400/60"
+                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-emerald-400"
               />
               <button
                 onClick={saveName}
                 disabled={!nameInput.trim()}
-                className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+                className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
               >
                 확인
               </button>
             </div>
           </div>
         ) : (
-          <div className="mb-6 rounded-2xl bg-indigo-500/15 border border-indigo-400/25 p-4 flex items-center justify-between">
+          <div className="mb-6 rounded-2xl bg-emerald-50 border border-emerald-200 p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-indigo-300 text-lg">👤</span>
-              <span className="text-white font-semibold">{name}</span>
-              <span className="text-white/40 text-sm">으로 투표 중</span>
+              <span className="text-emerald-600 text-lg">👤</span>
+              <span className="text-gray-800 font-semibold">{name}</span>
+              <span className="text-gray-500 text-sm">으로 투표 중</span>
             </div>
-            <button onClick={resetName} className="text-white/30 hover:text-white/60 text-xs transition-colors">
+            <button onClick={resetName} className="text-gray-400 hover:text-gray-600 text-xs transition-colors">
               변경
             </button>
           </div>
@@ -203,15 +203,15 @@ export default function SchedulePage() {
             const totalVotes = Object.values(weekCounts).reduce((a, names) => a + names.length, 0)
 
             return (
-              <div key={w.week} className="rounded-2xl border border-white/15 bg-white/5 p-5">
+              <div key={w.week} className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center flex-shrink-0">
                     <span className="text-white font-black text-sm">{w.week}주</span>
                   </div>
                   <div>
-                    <p className="text-white font-semibold text-sm">{w.date}</p>
+                    <p className="text-gray-800 font-semibold text-sm">{w.date}</p>
                     {totalVotes > 0 && (
-                      <p className="text-white/30 text-xs">{totalVotes}명 투표</p>
+                      <p className="text-gray-400 text-xs">{totalVotes}명 투표</p>
                     )}
                   </div>
                 </div>
@@ -231,29 +231,28 @@ export default function SchedulePage() {
                         disabled={!nameSaved || submitting === w.week}
                         className={`relative w-full text-left rounded-xl border p-3 transition-all duration-200 overflow-hidden ${
                           isMyVote
-                            ? "border-indigo-400/60 bg-indigo-500/20"
+                            ? "border-emerald-500 bg-emerald-50"
                             : nameSaved
-                            ? "border-white/10 bg-white/5 hover:border-white/25 hover:bg-white/10"
-                            : "border-white/10 bg-white/5 opacity-50 cursor-not-allowed"
+                            ? "border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50/50"
+                            : "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
                         }`}
                       >
-                        {/* 투표 바 */}
                         {count > 0 && (
                           <div
-                            className="absolute inset-y-0 left-0 bg-indigo-500/10 transition-all duration-500"
+                            className="absolute inset-y-0 left-0 bg-emerald-100 transition-all duration-500"
                             style={{ width: `${barWidth}%` }}
                           />
                         )}
                         <div className="relative flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            {isMyVote && <span className="text-indigo-400 text-sm">✓</span>}
-                            <span className={`text-sm font-medium ${isMyVote ? "text-indigo-300" : "text-white/70"}`}>
+                            {isMyVote && <span className="text-emerald-600 text-sm">✓</span>}
+                            <span className={`text-sm font-medium ${isMyVote ? "text-emerald-700" : "text-gray-600"}`}>
                               {slot}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
                             {count > 0 && (
-                              <span className="text-white/40 text-xs">
+                              <span className="text-gray-400 text-xs">
                                 {voters.join(", ")} ({count}명)
                               </span>
                             )}
@@ -274,18 +273,18 @@ export default function SchedulePage() {
                       onKeyDown={(e) => e.key === "Enter" && addSlot(w.week)}
                       placeholder="예: 오후 3:00"
                       autoFocus
-                      className="flex-1 bg-white/10 border border-white/20 rounded-xl px-3 py-2 text-white placeholder-white/30 text-sm focus:outline-none focus:border-indigo-400/60"
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-emerald-400"
                     />
                     <button
                       onClick={() => addSlot(w.week)}
                       disabled={!newSlotInput.trim()}
-                      className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
+                      className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
                     >
                       추가
                     </button>
                     <button
                       onClick={() => { setAddingSlot(null); setNewSlotInput("") }}
-                      className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white/60 text-sm transition-colors"
+                      className="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm transition-colors"
                     >
                       취소
                     </button>
@@ -293,7 +292,7 @@ export default function SchedulePage() {
                 ) : (
                   <button
                     onClick={() => setAddingSlot(w.week)}
-                    className="mt-2 w-full text-center text-white/30 hover:text-white/60 text-xs py-1.5 rounded-xl border border-dashed border-white/10 hover:border-white/25 transition-colors"
+                    className="mt-2 w-full text-center text-gray-400 hover:text-gray-600 text-xs py-1.5 rounded-xl border border-dashed border-gray-200 hover:border-gray-300 transition-colors"
                   >
                     + 시간 추가
                   </button>
@@ -304,24 +303,24 @@ export default function SchedulePage() {
         </div>
 
         {loading && (
-          <div className="text-center text-white/30 text-sm mb-6">불러오는 중...</div>
+          <div className="text-center text-gray-400 text-sm mb-6">불러오는 중...</div>
         )}
 
         {error && (
-          <div className="mb-6 rounded-2xl bg-red-500/15 border border-red-400/30 p-4 text-red-300 text-sm">
+          <div className="mb-6 rounded-2xl bg-red-50 border border-red-200 p-4 text-red-600 text-sm">
             ⚠️ {error}
           </div>
         )}
 
-        <div className="rounded-2xl bg-indigo-500/10 border border-indigo-400/20 p-5 mb-8">
-          <h3 className="text-indigo-300 font-semibold text-sm mb-3">📌 참가 안내</h3>
-          <ul className="space-y-1.5 text-white/60 text-sm">
+        <div className="rounded-2xl bg-emerald-50 border border-emerald-200 p-5 mb-8">
+          <h3 className="text-emerald-700 font-semibold text-sm mb-3">📌 참가 안내</h3>
+          <ul className="space-y-1.5 text-gray-600 text-sm">
             <li>· 이미 투표한 경우 다시 선택하면 변경됩니다</li>
             <li>· 노트북을 지참해주세요</li>
           </ul>
         </div>
 
-        <div className="text-center text-white/20 text-xs">
+        <div className="text-center text-gray-400 text-xs">
           <p>문의는 강사에게 직접 연락해주세요</p>
         </div>
       </div>

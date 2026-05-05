@@ -133,36 +133,36 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
   return (
     <div className="space-y-6">
       {/* 단계 배지 */}
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 w-fit">
-        <span className="text-emerald-400 text-xs font-bold">2단계</span>
-        <span className="text-emerald-300 text-xs">AI 실습</span>
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 border border-emerald-200 w-fit">
+        <span className="text-emerald-700 text-xs font-bold">2단계</span>
+        <span className="text-emerald-600 text-xs">AI 실습</span>
       </div>
 
       {/* 실습 과제 */}
-      <div className="rounded-2xl bg-white/5 border border-white/15 p-5">
-        <p className="text-white/40 text-xs uppercase tracking-widest mb-2">실습 과제</p>
-        <p className="text-white/90 text-sm leading-relaxed">{practice.task}</p>
+      <div className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+        <p className="text-gray-400 text-xs uppercase tracking-widest mb-2">실습 과제</p>
+        <p className="text-gray-800 text-sm leading-relaxed">{practice.task}</p>
       </div>
 
       {/* 추천 프롬프트 */}
-      <div className="rounded-2xl bg-indigo-500/10 border border-indigo-400/20 p-5">
+      <div className="rounded-2xl bg-blue-50 border border-blue-200 p-5">
         <div className="flex items-center justify-between mb-3">
-          <p className="text-indigo-300 text-xs uppercase tracking-widest">추천 프롬프트</p>
+          <p className="text-blue-700 text-xs uppercase tracking-widest">추천 프롬프트</p>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/35 border border-indigo-400/30 text-indigo-300 text-xs transition-all"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-100 hover:bg-blue-200 border border-blue-200 text-blue-700 text-xs transition-all"
           >
             {copied ? "✓ 복사됨" : "복사하기"}
           </button>
         </div>
-        <p className="text-white/70 text-sm leading-relaxed font-mono">{practice.prompt}</p>
+        <p className="text-blue-800 text-sm leading-relaxed font-mono">{practice.prompt}</p>
       </div>
 
       {/* 이름 없으면 입력 요청 */}
       {!name && (
-        <div className="rounded-2xl bg-white/5 border border-white/15 p-5">
-          <p className="text-white/70 text-sm font-semibold mb-1">이름을 입력해주세요</p>
-          <p className="text-white/40 text-xs mb-3">기록이 다른 참가자들과 공유됩니다</p>
+        <div className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+          <p className="text-gray-700 text-sm font-semibold mb-1">이름을 입력해주세요</p>
+          <p className="text-gray-400 text-xs mb-3">기록이 다른 참가자들과 공유됩니다</p>
           <div className="flex gap-2">
             <input
               type="text"
@@ -170,12 +170,12 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
               onChange={(e) => setNameInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && saveName()}
               placeholder="이름 입력"
-              className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white placeholder-white/30 text-sm focus:outline-none focus:border-indigo-400/60"
+              className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-emerald-400"
             />
             <button
               onClick={saveName}
               disabled={!nameInput.trim()}
-              className="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-400 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
+              className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
             >
               확인
             </button>
@@ -184,47 +184,47 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
       )}
 
       {/* 내 기록 입력 */}
-      <div className="rounded-2xl bg-white/5 border border-white/15 p-5">
-        <p className="text-white/40 text-xs uppercase tracking-widest mb-1">내 생각 기록</p>
-        <p className="text-white/50 text-xs mb-3">{practice.reflection}</p>
+      <div className="rounded-2xl bg-white border border-gray-200 p-5 shadow-sm">
+        <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">내 생각 기록</p>
+        <p className="text-gray-500 text-xs mb-3">{practice.reflection}</p>
         <textarea
           value={text}
           onChange={(e) => { setText(e.target.value); setSaved(false) }}
           placeholder="Claude의 답변에서 배운 것, 느낀 것, 궁금한 점을 자유롭게 적어보세요..."
           rows={5}
-          className="w-full bg-white/8 border border-white/15 rounded-xl px-4 py-3 text-white/80 placeholder-white/25 text-sm focus:outline-none focus:border-indigo-400/50 resize-none leading-relaxed"
+          className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-emerald-400 resize-none leading-relaxed"
         />
-        {error && <p className="text-red-400 text-xs mt-2">⚠️ {error}</p>}
+        {error && <p className="text-red-500 text-xs mt-2">⚠️ {error}</p>}
 
         {feedbackLoading && (
-          <div className="mt-4 rounded-xl bg-indigo-500/10 border border-indigo-400/20 p-4">
-            <p className="text-indigo-300 text-xs animate-pulse">AI가 피드백을 작성하는 중...</p>
+          <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 p-4">
+            <p className="text-blue-600 text-xs animate-pulse">AI가 피드백을 작성하는 중...</p>
           </div>
         )}
 
         {aiFeedback && !feedbackLoading && (
-          <div className="mt-4 rounded-xl bg-indigo-500/10 border border-indigo-400/20 p-4">
-            <p className="text-indigo-300 text-xs font-semibold mb-2">AI 피드백</p>
-            <p className="text-white/75 text-sm leading-relaxed whitespace-pre-wrap">{aiFeedback}</p>
+          <div className="mt-4 rounded-xl bg-blue-50 border border-blue-200 p-4">
+            <p className="text-blue-700 text-xs font-semibold mb-2">AI 피드백</p>
+            <p className="text-blue-800 text-sm leading-relaxed whitespace-pre-wrap">{aiFeedback}</p>
           </div>
         )}
 
         <div className="flex items-center justify-between mt-3">
-          <span className="text-white/25 text-xs">
+          <span className="text-gray-400 text-xs">
             {saved ? "✓ 저장됨" : text.trim() ? "저장되지 않음" : ""}
           </span>
           <div className="flex gap-2">
             <button
               onClick={handleSave}
               disabled={!text.trim() || saving}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 disabled:opacity-30 disabled:cursor-not-allowed text-white/70 text-sm transition-colors"
+              className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 disabled:opacity-30 disabled:cursor-not-allowed text-gray-600 text-sm transition-colors border border-gray-200"
             >
               {saving ? "저장 중..." : "저장"}
             </button>
             <button
               onClick={onComplete}
               disabled={!saved && !text.trim()}
-              className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
+              className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors"
             >
               완료 →
             </button>
@@ -234,15 +234,15 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
 
       {/* 다른 참가자 기록 */}
       {!loading && others.length > 0 && (
-        <div className="rounded-2xl bg-white/3 border border-white/10 p-5">
-          <p className="text-white/40 text-xs uppercase tracking-widest mb-4">
+        <div className="rounded-2xl bg-gray-50 border border-gray-200 p-5">
+          <p className="text-gray-400 text-xs uppercase tracking-widest mb-4">
             다른 참가자 기록 ({others.length}명)
           </p>
           <div className="flex flex-col gap-3">
             {others.map((e) => (
-              <div key={e.name} className="rounded-xl bg-white/5 border border-white/10 p-4">
-                <p className="text-indigo-300 text-xs font-semibold mb-1">{e.name}</p>
-                <p className="text-white/60 text-sm leading-relaxed whitespace-pre-wrap">{e.text}</p>
+              <div key={e.name} className="rounded-xl bg-white border border-gray-200 p-4 shadow-sm">
+                <p className="text-emerald-700 text-xs font-semibold mb-1">{e.name}</p>
+                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{e.text}</p>
               </div>
             ))}
           </div>
@@ -250,7 +250,7 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
       )}
 
       {loading && (
-        <p className="text-white/30 text-xs text-center">불러오는 중...</p>
+        <p className="text-gray-400 text-xs text-center">불러오는 중...</p>
       )}
     </div>
   )

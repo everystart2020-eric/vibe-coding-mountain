@@ -71,45 +71,45 @@ export default function Onboarding({ onComplete }: { onComplete: (profile: UserP
   // ── 인트로 ───────────────────────────────────────────────
   if (step === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 text-5xl mb-6 shadow-2xl">
+          <div className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-white border border-gray-200 shadow-lg text-5xl mb-6">
             ⛰️
           </div>
-          <h1 className="text-4xl font-black text-white mb-3 tracking-tight">
+          <h1 className="text-4xl font-black text-gray-900 mb-3 tracking-tight">
             바이브 코딩<br />산악 학교
           </h1>
-          <p className="text-indigo-300 text-base leading-relaxed mb-8">
+          <p className="text-emerald-700 text-base leading-relaxed mb-8">
             산을 오르듯, 단계별로 배우는<br />AI 코딩 여정에 오신 것을 환영해요!
           </p>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-8 text-left space-y-4">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-5 mb-8 text-left space-y-4">
             <div className="flex items-start gap-3">
               <span className="text-xl flex-shrink-0">🗺️</span>
               <div>
-                <p className="text-white/80 text-sm font-semibold">5개의 산을 정복하세요</p>
-                <p className="text-white/40 text-xs mt-0.5">터미널 · Git · Claude Code · 바이브 코딩 · 첫 프로젝트</p>
+                <p className="text-gray-700 text-sm font-semibold">5개의 산을 정복하세요</p>
+                <p className="text-gray-500 text-xs mt-0.5">터미널 · Git · Claude Code · 바이브 코딩 · 첫 프로젝트</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-xl flex-shrink-0">🤖</span>
               <div>
-                <p className="text-white/80 text-sm font-semibold">AI-Eric 강사가 항상 함께해요</p>
-                <p className="text-white/40 text-xs mt-0.5">모르는 게 있으면 언제든 질문하세요</p>
+                <p className="text-gray-700 text-sm font-semibold">AI-Eric 강사가 항상 함께해요</p>
+                <p className="text-gray-500 text-xs mt-0.5">모르는 게 있으면 언제든 질문하세요</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="text-xl flex-shrink-0">📋</span>
               <div>
-                <p className="text-white/80 text-sm font-semibold">종합 테스트로 마무리</p>
-                <p className="text-white/40 text-xs mt-0.5">20문제 + PDF 보고서 저장까지</p>
+                <p className="text-gray-700 text-sm font-semibold">종합 테스트로 마무리</p>
+                <p className="text-gray-500 text-xs mt-0.5">20문제 + PDF 보고서 저장까지</p>
               </div>
             </div>
           </div>
 
           <button
             onClick={() => setStep("form")}
-            className="w-full py-4 rounded-xl font-black text-white text-lg bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition-opacity shadow-lg"
+            className="w-full py-4 rounded-xl font-black text-white text-lg bg-emerald-700 hover:bg-emerald-600 transition-colors shadow-md"
           >
             시작하기 →
           </button>
@@ -121,28 +121,28 @@ export default function Onboarding({ onComplete }: { onComplete: (profile: UserP
   // ── 폼 ───────────────────────────────────────────────────
   if (step === "form") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full">
           <div className="text-center mb-8">
             <div className="text-5xl mb-4">👋</div>
-            <h2 className="text-2xl font-black text-white mb-2">자기소개를 해주세요!</h2>
-            <p className="text-indigo-300/70 text-sm">이름과 나이를 알면 더 친근하게 도와드릴 수 있어요</p>
+            <h2 className="text-2xl font-black text-gray-900 mb-2">자기소개를 해주세요!</h2>
+            <p className="text-gray-500 text-sm">이름과 나이를 알면 더 친근하게 도와드릴 수 있어요</p>
           </div>
 
           <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
             <div>
-              <label className="block text-white/60 text-xs mb-2 font-medium tracking-wide">이름</label>
+              <label className="block text-gray-600 text-xs mb-2 font-medium tracking-wide">이름</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="예) 홍길동"
-                className="w-full rounded-xl border border-white/15 bg-white/5 text-white placeholder-white/25 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400/40 transition-all"
+                className="w-full rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400 transition-all"
                 autoFocus
               />
             </div>
             <div>
-              <label className="block text-white/60 text-xs mb-2 font-medium tracking-wide">나이</label>
+              <label className="block text-gray-600 text-xs mb-2 font-medium tracking-wide">나이</label>
               <input
                 type="number"
                 value={age}
@@ -150,14 +150,14 @@ export default function Onboarding({ onComplete }: { onComplete: (profile: UserP
                 placeholder="예) 28"
                 min={1}
                 max={120}
-                className="w-full rounded-xl border border-white/15 bg-white/5 text-white placeholder-white/25 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400/40 transition-all"
+                className="w-full rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:border-emerald-400 transition-all"
               />
             </div>
 
             <button
               type="submit"
               disabled={!isFormValid}
-              className="mt-2 w-full py-4 rounded-xl font-black text-white text-lg bg-gradient-to-r from-indigo-500 to-purple-500 disabled:opacity-30 hover:opacity-90 transition-opacity shadow-lg"
+              className="mt-2 w-full py-4 rounded-xl font-black text-white text-lg bg-emerald-700 hover:bg-emerald-600 disabled:opacity-30 transition-colors shadow-md"
             >
               다음 →
             </button>
@@ -169,20 +169,20 @@ export default function Onboarding({ onComplete }: { onComplete: (profile: UserP
 
   // ── 환영 ─────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full text-center">
         <div className="text-7xl mb-6">{welcome!.emoji}</div>
-        <h2 className="text-3xl font-black text-white mb-4 leading-tight">{welcome!.title}</h2>
-        <div className="bg-indigo-500/15 border border-indigo-400/25 rounded-2xl p-5 mb-6">
-          <p className="text-indigo-100 text-base leading-relaxed">{welcome!.body}</p>
+        <h2 className="text-3xl font-black text-gray-900 mb-4 leading-tight">{welcome!.title}</h2>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-6">
+          <p className="text-emerald-800 text-base leading-relaxed">{welcome!.body}</p>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-8 text-sm text-white/50">
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-8 text-sm text-gray-500">
           산악 학교의 모든 강사진이&nbsp;
-          <span className="text-white/80 font-semibold">{name.trim()}님</span>의 등반을 응원합니다! 🎉
+          <span className="text-gray-800 font-semibold">{name.trim()}님</span>의 등반을 응원합니다! 🎉
         </div>
         <button
           onClick={handleComplete}
-          className="w-full py-4 rounded-xl font-black text-white text-lg bg-gradient-to-r from-indigo-500 to-purple-500 hover:opacity-90 transition-opacity shadow-lg"
+          className="w-full py-4 rounded-xl font-black text-white text-lg bg-emerald-700 hover:bg-emerald-600 transition-colors shadow-md"
         >
           등반 시작! ⛰️
         </button>

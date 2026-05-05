@@ -41,10 +41,10 @@ export default function MountainPage() {
 
   if (!mountain) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 flex items-center justify-center">
-        <div className="text-center bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8">
-          <p className="text-white/60 mb-4">산을 찾을 수 없어요.</p>
-          <button onClick={() => router.push("/")} className="text-indigo-300 underline hover:text-indigo-200">
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <div className="text-center bg-white border border-gray-200 shadow-sm rounded-2xl p-8">
+          <p className="text-gray-500 mb-4">산을 찾을 수 없어요.</p>
+          <button onClick={() => router.push("/")} className="text-emerald-700 underline hover:text-emerald-600">
             홈으로 돌아가기
           </button>
         </div>
@@ -93,14 +93,14 @@ export default function MountainPage() {
 
   if (view === "list" || !activeStage) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 relative overflow-hidden">
+      <div className="min-h-screen bg-stone-50 relative overflow-hidden">
         {/* 배경 장식 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl" />
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-100 rounded-full blur-3xl opacity-70" />
+          <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-100 rounded-full blur-3xl opacity-70" />
         </div>
 
-        {/* 헤더 */}
+        {/* 헤더 — 배경 사진 위에 다크 오버레이 유지 */}
         <div className="relative overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center scale-105"
@@ -137,7 +137,7 @@ export default function MountainPage() {
 
         {/* 단계 목록 */}
         <div className="relative max-w-2xl mx-auto px-4 py-8">
-          <h2 className="text-white/60 text-xs tracking-widest uppercase font-medium mb-5">📍 등반 경로</h2>
+          <h2 className="text-gray-400 text-xs tracking-widest uppercase font-medium mb-5">📍 등반 경로</h2>
           <div className="flex flex-col gap-3">
             {mountain.stages.map((stage, idx) => {
               const isDone = completed.has(stage.id)
@@ -149,42 +149,42 @@ export default function MountainPage() {
                   <div className="flex flex-col items-center">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 border-2 transition-all ${
                       isDone
-                        ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300"
+                        ? "bg-emerald-100 border-emerald-400 text-emerald-700"
                         : isLocked
-                        ? "bg-white/5 border-white/15 text-white/25"
-                        : "bg-indigo-500/20 border-indigo-400/60 text-indigo-300"
+                        ? "bg-gray-100 border-gray-200 text-gray-300"
+                        : "bg-emerald-50 border-emerald-400 text-emerald-700"
                     }`}>
                       {isDone ? "✓" : isLocked ? "🔒" : idx + 1}
                     </div>
                     {idx < mountain.stages.length - 1 && (
-                      <div className={`w-px flex-1 mt-1 ${isDone ? "bg-emerald-400/30" : "bg-white/10"}`} />
+                      <div className={`w-px flex-1 mt-1 ${isDone ? "bg-emerald-300" : "bg-gray-200"}`} />
                     )}
                   </div>
 
                   <div
                     className={`flex-1 mb-2 rounded-xl border p-4 transition-all duration-200 ${
                       isDone
-                        ? "border-emerald-500/25 bg-emerald-500/10 backdrop-blur-sm"
+                        ? "border-emerald-200 bg-emerald-50"
                         : isLocked
-                        ? "border-white/8 bg-white/3 opacity-50"
-                        : "border-white/15 bg-white/8 backdrop-blur-md hover:bg-white/12 hover:border-white/25 cursor-pointer hover:shadow-lg"
+                        ? "border-gray-100 bg-gray-50 opacity-50"
+                        : "border-gray-200 bg-white hover:border-emerald-300 hover:bg-emerald-50 cursor-pointer hover:shadow-md"
                     }`}
                     onClick={() => !isLocked && openStage(stage)}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h3 className={`font-bold text-sm ${isLocked ? "text-white/25" : isDone ? "text-emerald-300" : "text-white"}`}>
+                        <h3 className={`font-bold text-sm ${isLocked ? "text-gray-300" : isDone ? "text-emerald-700" : "text-gray-800"}`}>
                           {stage.title}
                         </h3>
-                        <p className={`text-xs mt-0.5 ${isLocked ? "text-white/20" : "text-white/50"}`}>
+                        <p className={`text-xs mt-0.5 ${isLocked ? "text-gray-300" : "text-gray-500"}`}>
                           {stage.description}
                         </p>
                       </div>
                       {!isLocked && (
                         <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0 font-medium ${
                           isDone
-                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                            : "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                            ? "bg-emerald-100 text-emerald-700 border border-emerald-200"
+                            : "bg-emerald-50 text-emerald-700 border border-emerald-200"
                         }`}>
                           {isDone ? "완료 ✓" : "시작 →"}
                         </span>
@@ -193,10 +193,10 @@ export default function MountainPage() {
 
                     {stage.prerequisites.length > 0 && isLocked && (
                       <div className="mt-2">
-                        <p className="text-xs text-white/25 font-medium">필요 조건:</p>
+                        <p className="text-xs text-gray-400 font-medium">필요 조건:</p>
                         <ul className="mt-1 flex flex-col gap-0.5">
                           {stage.prerequisites.map((p, i) => (
-                            <li key={i} className="text-xs text-white/20 flex items-center gap-1">
+                            <li key={i} className="text-xs text-gray-400 flex items-center gap-1">
                               <span>•</span> {p}
                             </li>
                           ))}
@@ -232,14 +232,14 @@ export default function MountainPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-950 to-purple-950 relative overflow-hidden">
+    <div className="min-h-screen bg-stone-50 relative overflow-hidden">
       {/* 배경 장식 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-100 rounded-full blur-3xl opacity-70" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-green-100 rounded-full blur-3xl opacity-70" />
       </div>
 
-      {/* 헤더 */}
+      {/* 헤더 — 배경 사진 위에 다크 오버레이 유지 */}
       <div className="relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -267,12 +267,12 @@ export default function MountainPage() {
       {/* 콘텐츠 */}
       <div className="relative max-w-2xl mx-auto px-4 py-6">
         {activeStage.prerequisites.length > 0 && (
-          <div className="mb-5 rounded-xl bg-blue-500/10 backdrop-blur-md border border-blue-400/20 p-4">
-            <p className="text-sm font-bold text-blue-300 mb-2">📚 이 단계를 위한 기초 지식</p>
+          <div className="mb-5 rounded-xl bg-blue-50 border border-blue-200 p-4">
+            <p className="text-sm font-bold text-blue-700 mb-2">📚 이 단계를 위한 기초 지식</p>
             <ul className="flex flex-col gap-1">
               {activeStage.prerequisites.map((p, i) => (
-                <li key={i} className="text-sm text-blue-200/70 flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span> {p}
+                <li key={i} className="text-sm text-blue-700/80 flex items-center gap-2">
+                  <span className="text-emerald-600">✓</span> {p}
                 </li>
               ))}
             </ul>
@@ -282,7 +282,7 @@ export default function MountainPage() {
         {view === "content" && (
           <>
             <div
-              className="text-white/80 leading-relaxed max-w-none bg-white/8 backdrop-blur-md rounded-2xl border border-white/15 p-6 shadow-xl"
+              className="text-gray-700 leading-relaxed max-w-none bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
               dangerouslySetInnerHTML={{ __html: renderMarkdown(activeStage.content) }}
             />
             <AskAI
@@ -292,10 +292,9 @@ export default function MountainPage() {
             />
             <button
               onClick={() => setView("quiz")}
-              className={`mt-5 w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r ${mountain.color} hover:opacity-90 transition-opacity shadow-lg relative overflow-hidden group`}
+              className="mt-5 w-full py-4 rounded-xl font-bold text-white bg-emerald-700 hover:bg-emerald-600 transition-colors shadow-sm"
             >
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
-              <span className="relative">이해했어요! 퀴즈 풀기 →</span>
+              이해했어요! 퀴즈 풀기 →
             </button>
           </>
         )}
@@ -330,14 +329,14 @@ export default function MountainPage() {
 
 function renderMarkdown(md: string): string {
   return md
-    .replace(/```(\w*)\n([\s\S]*?)```/g, "<pre class='bg-black/40 text-emerald-300 rounded-xl p-4 text-xs overflow-x-auto my-3 font-mono leading-relaxed border border-white/10'><code>$2</code></pre>")
-    .replace(/^### (.+)$/gm, "<h3 class='text-base font-bold mt-4 mb-2 text-white/90'>$1</h3>")
-    .replace(/^## (.+)$/gm, "<h2 class='text-lg font-bold mt-6 mb-3 text-white'>$1</h2>")
-    .replace(/^# (.+)$/gm, "<h1 class='text-xl font-black mt-6 mb-3 text-white'>$1</h1>")
-    .replace(/\*\*(.+?)\*\*/g, "<strong class='font-bold text-white'>$1</strong>")
-    .replace(/`([^`\n]+)`/g, "<code class='bg-white/10 px-1.5 py-0.5 rounded text-pink-300 text-xs font-mono border border-white/10'>$1</code>")
-    .replace(/^- (.+)$/gm, "<li class='ml-4 list-disc text-white/70 my-0.5'>$1</li>")
-    .replace(/^(\d+)\. (.+)$/gm, "<li class='ml-4 list-decimal text-white/70 my-0.5'>$2</li>")
+    .replace(/```(\w*)\n([\s\S]*?)```/g, "<pre class='bg-gray-100 text-emerald-700 rounded-xl p-4 text-xs overflow-x-auto my-3 font-mono leading-relaxed border border-gray-200'><code>$2</code></pre>")
+    .replace(/^### (.+)$/gm, "<h3 class='text-base font-bold mt-4 mb-2 text-gray-700'>$1</h3>")
+    .replace(/^## (.+)$/gm, "<h2 class='text-lg font-bold mt-6 mb-3 text-gray-900'>$1</h2>")
+    .replace(/^# (.+)$/gm, "<h1 class='text-xl font-black mt-6 mb-3 text-gray-900'>$1</h1>")
+    .replace(/\*\*(.+?)\*\*/g, "<strong class='font-bold text-gray-900'>$1</strong>")
+    .replace(/`([^`\n]+)`/g, "<code class='bg-gray-100 px-1.5 py-0.5 rounded text-pink-600 text-xs font-mono border border-gray-200'>$1</code>")
+    .replace(/^- (.+)$/gm, "<li class='ml-4 list-disc text-gray-600 my-0.5'>$1</li>")
+    .replace(/^(\d+)\. (.+)$/gm, "<li class='ml-4 list-decimal text-gray-600 my-0.5'>$2</li>")
     .replace(/\n\n/g, "<p class='my-2'/>")
     .replace(/\n/g, "<br/>")
 }
