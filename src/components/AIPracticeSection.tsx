@@ -93,7 +93,6 @@ export default function AIPracticeSection({ mountainId, stageId, practice, onCom
       fetchAIFeedback(text)
     } catch (e) {
       setError(e instanceof Error ? e.message : "저장 중 오류가 발생했습니다")
-      setSaved(true)
     } finally {
       setSaving(false)
     }

@@ -137,10 +137,10 @@ export default function HomePage() {
                   </div>
                 )}
                 <Link href={`/mountain/${mountain.id}`}>
-                <div className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-xl cursor-pointer ${
+                <div className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer ${
                   isCompleted
                     ? "border-yellow-300"
-                    : "border-gray-300 hover:border-gray-400"
+                    : "border-gray-300 hover:border-emerald-400/60"
                 }`}>
                   {/* 산 배경 이미지 */}
                   <div
@@ -197,6 +197,28 @@ export default function HomePage() {
 
                       <div className="text-white/30 group-hover:text-white/70 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
                         →
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 단계 미리보기 — hover 시 슬라이드업 */}
+                  <div className="max-h-0 group-hover:max-h-36 overflow-hidden transition-all duration-300 ease-out">
+                    <div className="px-5 py-3 bg-black/40 backdrop-blur-sm border-t border-white/10">
+                      <p className="text-white/40 text-xs uppercase tracking-widest mb-2">단계 미리보기</p>
+                      <div className="flex flex-col gap-1">
+                        {mountain.stages.slice(0, 4).map((s, i) => (
+                          <div key={s.id} className="flex items-center gap-2">
+                            <span className={`text-xs font-mono w-4 ${completed.has(s.id) ? "text-emerald-400" : "text-white/30"}`}>
+                              {completed.has(s.id) ? "✓" : `${i + 1}.`}
+                            </span>
+                            <span className={`text-xs truncate ${completed.has(s.id) ? "text-emerald-300" : "text-white/60"}`}>
+                              {s.title}
+                            </span>
+                          </div>
+                        ))}
+                        {mountain.stages.length > 4 && (
+                          <span className="text-white/30 text-xs ml-6">+{mountain.stages.length - 4}개 더</span>
+                        )}
                       </div>
                     </div>
                   </div>
