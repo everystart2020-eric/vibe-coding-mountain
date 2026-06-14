@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase"
 export async function GET() {
   const [votesResult, slotsResult] = await Promise.all([
     supabase.from("votes").select("week, time_slot, name"),
-    supabase.from("custom_slots").select("week, slot"),
+    supabase.from("custom_slots").select("week, slot, added_by"),
   ])
 
   if (votesResult.error) {

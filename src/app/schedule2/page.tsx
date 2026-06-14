@@ -43,7 +43,7 @@ export default function Schedule2Page() {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [customSlots, setCustomSlots] = useState<Record<number, string[]>>({})
+  const [customSlots, setCustomSlots] = useState<Record<number, { slot: string; added_by: string | null }[]>>({})
   const [addingSlot, setAddingSlot] = useState<number | null>(null)
   const [newSlotInput, setNewSlotInput] = useState("")
   const [locations, setLocations] = useState<LocationSuggestion[]>([])
@@ -74,10 +74,10 @@ export default function Schedule2Page() {
         if (v.name === currentName) mine[v.week] = v.time_slot
       }
       setMyVotes(mine)
-      const slotMap: Record<number, string[]> = {}
+      const slotMap: Record<number, { slot: string; added_by: string | null }[]> = {}
       for (const s of (data.customSlots ?? []).filter((s: { week: number }) => s.week >= 11)) {
         if (!slotMap[s.week]) slotMap[s.week] = []
-        slotMap[s.week].push(s.slot)
+        slotMap[s.week].push({ slot: s.slot, added_by: s.added_by ?? null })
       }
       setCustomSlots(slotMap)
     } catch (e) {
@@ -108,12 +108,12 @@ export default function Schedule2Page() {
 
   async function addSlot(week: number) {
     const slot = newSlotInput.trim()
-    if (!slot) return
+    if (!slot || !name) return
     try {
       const res = await fetch("/api/slots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ week, slot }),
+        body: JSON.stringify({ week, slot, added_by: name }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? "시간 추가 실패")
@@ -273,8 +273,9 @@ export default function Schedule2Page() {
             const mySlot = myVotes[w.week]
             const weekCounts = counts[w.week] ?? {}
             const totalVotes = Object.values(weekCounts).reduce((a, names) => a + names.length, 0)
-            const allSlots = [...w.slots, ...(customSlots[w.week] ?? [])]
-            const maxVotes = Math.max(...allSlots.map((s) => (weekCounts[s] ?? []).length), 1)
+            const customSlotItems = customSlots[w.week] ?? []
+            const allSlotKeys = [...w.slots, ...customSlotItems.map((s) => s.slot)]
+            const maxVotes = Math.max(...allSlotKeys.map((s) => (weekCounts[s] ?? []).length), 1)
 
             return (
               <div key={w.week} className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
@@ -289,7 +290,10 @@ export default function Schedule2Page() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  {allSlots.map((slot) => {
+                  {[
+                    ...w.slots.map((slot) => ({ slot, added_by: null })),
+                    ...customSlotItems,
+                  ].map(({ slot, added_by }) => {
                     const voters = weekCounts[slot] ?? []
                     const count = voters.length
                     const isMyVote = mySlot === slot
@@ -317,9 +321,14 @@ export default function Schedule2Page() {
                         <div className="relative flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {isMyVote && <span className="text-violet-600 text-sm">✓</span>}
-                            <span className={`text-sm font-medium ${isMyVote ? "text-violet-700" : "text-gray-600"}`}>
-                              {slot}
-                            </span>
+                            <div>
+                              <span className={`text-sm font-medium ${isMyVote ? "text-violet-700" : "text-gray-600"}`}>
+                                {slot}
+                              </span>
+                              {added_by && (
+                                <span className="ml-2 text-gray-400 text-xs">({added_by} 추가)</span>
+                              )}
+                            </div>
                           </div>
                           {count > 0 && (
                             <span className="text-gray-400 text-xs">
@@ -357,14 +366,14 @@ export default function Schedule2Page() {
                       취소
                     </button>
                   </div>
-                ) : (
+                ) : nameSaved ? (
                   <button
                     onClick={() => setAddingSlot(w.week)}
                     className="mt-2 w-full text-center text-gray-400 hover:text-gray-600 text-xs py-1.5 rounded-xl border border-dashed border-gray-200 hover:border-gray-300 transition-colors"
                   >
                     + 시간 추가
                   </button>
-                )}
+                ) : null}
               </div>
             )
           })}
