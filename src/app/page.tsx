@@ -250,16 +250,35 @@ export default function HomePage() {
         </div>
 
         {/* 오프라인 일정 */}
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col gap-3">
+          <Link href="/schedule2">
+            <div className="group rounded-2xl border border-violet-200 bg-violet-50 hover:bg-violet-100 overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-lg cursor-pointer">
+              <div className="p-5 flex items-center gap-4">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
+                  📅
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h3 className="text-violet-800 font-bold text-base">오프라인 일정 · 2기</h3>
+                    <span className="px-1.5 py-0.5 rounded-full bg-violet-200 text-violet-700 text-xs font-semibold">NEW</span>
+                  </div>
+                  <p className="text-violet-700/70 text-xs leading-relaxed">7–8월 격주 토요일 4회 · 시간 투표 진행 중</p>
+                </div>
+                <div className="text-violet-500 group-hover:text-violet-600 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
+                  →
+                </div>
+              </div>
+            </div>
+          </Link>
           <Link href="/schedule">
             <div className="group rounded-2xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 overflow-hidden transition-all duration-300 hover:scale-[1.01] hover:shadow-lg cursor-pointer">
               <div className="p-5 flex items-center gap-4">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-2xl shadow-lg flex-shrink-0">
-                  📅
+                  📋
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-emerald-800 font-bold text-base mb-0.5">오프라인 일정 확인</h3>
-                  <p className="text-emerald-700/70 text-xs leading-relaxed">5월 매주 토요일 · 링키영어 본사카페 1층 · 시간 선택 가능</p>
+                  <h3 className="text-emerald-800 font-bold text-base mb-0.5">오프라인 일정 · 1기</h3>
+                  <p className="text-emerald-700/70 text-xs leading-relaxed">5월 매주 토요일 · 링키영어 본사카페 1층</p>
                 </div>
                 <div className="text-emerald-500 group-hover:text-emerald-600 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
                   →
