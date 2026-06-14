@@ -6,10 +6,11 @@ import Link from "next/link"
 const NAME_KEY = "vote-name"
 
 const WEEKS = [
-  { week: 11, date: "7월 11일 (토)", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 12, date: "7월 25일 (토)", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 13, date: "8월 8일 (토)", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 14, date: "8월 22일 (토)", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 12, date: "7월 25일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 13, date: "8월 8일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 14, date: "8월 22일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 15, date: "9월 5일 (토)", label: "5회", slots: ["오전 11:00", "오후 2:00"] },
 ]
 
 type VoteRecord = { week: number; time_slot: string; name: string }
@@ -210,7 +211,7 @@ export default function Schedule2Page() {
 
         {/* 주차별 투표 */}
         <div className="flex flex-col gap-4 mb-8">
-          {WEEKS.map((w) => {
+          {WEEKS.map((w, idx) => {
             const mySlot = myVotes[w.week]
             const weekCounts = counts[w.week] ?? {}
             const totalVotes = Object.values(weekCounts).reduce((a, names) => a + names.length, 0)
@@ -221,13 +222,11 @@ export default function Schedule2Page() {
               <div key={w.week} className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-black text-sm">{w.week - 10}회</span>
+                    <span className="text-white font-black text-sm">{idx + 1}회</span>
                   </div>
                   <div>
                     <p className="text-gray-800 font-semibold text-sm">{w.date}</p>
-                    {totalVotes > 0 && (
-                      <p className="text-gray-400 text-xs">{totalVotes}명 투표</p>
-                    )}
+                    <p className="text-gray-400 text-xs">{w.label}{totalVotes > 0 ? ` · ${totalVotes}명 투표` : ""}</p>
                   </div>
                 </div>
 
@@ -326,7 +325,7 @@ export default function Schedule2Page() {
         <div className="rounded-2xl bg-violet-50 border border-violet-200 p-5 mb-8">
           <h3 className="text-violet-700 font-semibold text-sm mb-3">📌 참가 안내</h3>
           <ul className="space-y-1.5 text-gray-600 text-sm">
-            <li>· 격주 토요일 총 4회 진행 (7월 11일 ~ 8월 22일)</li>
+            <li>· 격주 토요일 총 5회 진행 (7월 11일 ~ 9월 5일)</li>
             <li>· 이미 투표한 경우 다시 선택하면 변경됩니다</li>
             <li>· 노트북을 지참해주세요</li>
             <li>· 장소는 확정 후 별도 안내드립니다</li>

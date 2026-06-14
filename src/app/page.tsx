@@ -262,7 +262,7 @@ export default function HomePage() {
                     <h3 className="text-violet-800 font-bold text-base">오프라인 일정 · 2기</h3>
                     <span className="px-1.5 py-0.5 rounded-full bg-violet-200 text-violet-700 text-xs font-semibold">NEW</span>
                   </div>
-                  <p className="text-violet-700/70 text-xs leading-relaxed">7–8월 격주 토요일 4회 · 시간 투표 진행 중</p>
+                  <p className="text-violet-700/70 text-xs leading-relaxed">7월~9월 격주 토요일 5회 · 시간 투표 진행 중</p>
                 </div>
                 <div className="text-violet-500 group-hover:text-violet-600 transition-all text-lg flex-shrink-0 group-hover:translate-x-1 duration-300">
                   →
