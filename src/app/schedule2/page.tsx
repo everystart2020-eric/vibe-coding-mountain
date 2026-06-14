@@ -8,9 +8,9 @@ const NAME_KEY = "vote-name"
 const WEEKS = [
   { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"] },
   { week: 12, date: "7월 18일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 13, date: "8월 8일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 14, date: "8월 15일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 15, date: "9월 5일 (토)", label: "5회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 13, date: "7월 25일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 14, date: "8월 8일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 15, date: "8월 15일 (토)", label: "5회", slots: ["오전 11:00", "오후 2:00"] },
 ]
 
 type VoteRecord = { week: number; time_slot: string; name: string }
@@ -325,7 +325,7 @@ export default function Schedule2Page() {
         <div className="rounded-2xl bg-violet-50 border border-violet-200 p-5 mb-8">
           <h3 className="text-violet-700 font-semibold text-sm mb-3">📌 참가 안내</h3>
           <ul className="space-y-1.5 text-gray-600 text-sm">
-            <li>· 총 5회 진행 (7월 11일 ~ 9월 5일)</li>
+            <li>· 총 5회 진행 (7월 11일 ~ 8월 15일)</li>
             <li>· 이미 투표한 경우 다시 선택하면 변경됩니다</li>
             <li>· 노트북을 지참해주세요</li>
             <li>· 장소는 확정 후 별도 안내드립니다</li>
