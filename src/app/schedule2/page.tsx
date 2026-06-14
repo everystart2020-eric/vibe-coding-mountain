@@ -5,6 +5,14 @@ import Link from "next/link"
 
 const NAME_KEY = "vote-name"
 
+type LocationSuggestion = {
+  id: string
+  name: string
+  address: string | null
+  suggested_by: string
+  voters: string[]
+}
+
 const WEEKS = [
   { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"] },
   { week: 12, date: "7월 18일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"] },
@@ -38,6 +46,20 @@ export default function Schedule2Page() {
   const [customSlots, setCustomSlots] = useState<Record<number, string[]>>({})
   const [addingSlot, setAddingSlot] = useState<number | null>(null)
   const [newSlotInput, setNewSlotInput] = useState("")
+  const [locations, setLocations] = useState<LocationSuggestion[]>([])
+  const [showLocationForm, setShowLocationForm] = useState(false)
+  const [locationName, setLocationName] = useState("")
+  const [locationAddress, setLocationAddress] = useState("")
+  const [locationSubmitting, setLocationSubmitting] = useState(false)
+  const [votingLocation, setVotingLocation] = useState<string | null>(null)
+
+  const fetchLocations = useCallback(async () => {
+    try {
+      const res = await fetch("/api/locations")
+      const data = await res.json()
+      if (res.ok) setLocations(data.suggestions ?? [])
+    } catch {}
+  }, [])
 
   const fetchVotes = useCallback(async (currentName: string) => {
     setLoading(true)
@@ -66,13 +88,14 @@ export default function Schedule2Page() {
   }, [])
 
   useEffect(() => {
+    fetchLocations()
     const saved = localStorage.getItem(NAME_KEY)
     if (saved) {
       setName(saved)
       setNameSaved(true)
       fetchVotes(saved)
     }
-  }, [fetchVotes])
+  }, [fetchVotes, fetchLocations])
 
   function saveName() {
     const trimmed = nameInput.trim()
@@ -119,6 +142,41 @@ export default function Schedule2Page() {
       setError(e instanceof Error ? e.message : "투표 중 오류가 발생했습니다")
     } finally {
       setSubmitting(null)
+    }
+  }
+
+  async function suggestLocation() {
+    if (!locationName.trim() || !name) return
+    setLocationSubmitting(true)
+    try {
+      const res = await fetch("/api/locations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: locationName, address: locationAddress, suggested_by: name }),
+      })
+      if (res.ok) {
+        setLocationName("")
+        setLocationAddress("")
+        setShowLocationForm(false)
+        await fetchLocations()
+      }
+    } finally {
+      setLocationSubmitting(false)
+    }
+  }
+
+  async function voteLocation(locationId: string) {
+    if (!name || votingLocation) return
+    setVotingLocation(locationId)
+    try {
+      const res = await fetch("/api/locations/vote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ location_id: locationId, voter_name: name }),
+      })
+      if (res.ok) await fetchLocations()
+    } finally {
+      setVotingLocation(null)
     }
   }
 
@@ -321,6 +379,91 @@ export default function Schedule2Page() {
             ⚠️ {error}
           </div>
         )}
+
+        {/* 장소 추천 */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-gray-800 font-bold text-base">📍 장소 추천</h2>
+            {nameSaved && (
+              <button
+                onClick={() => setShowLocationForm((v) => !v)}
+                className="px-3 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition-colors"
+              >
+                + 추천하기
+              </button>
+            )}
+          </div>
+
+          {showLocationForm && (
+            <div className="mb-3 rounded-2xl bg-white border border-gray-200 p-4 flex flex-col gap-2">
+              <input
+                type="text"
+                value={locationName}
+                onChange={(e) => setLocationName(e.target.value)}
+                placeholder="장소명 (예: 스터디카페 강남점)"
+                className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-violet-400"
+              />
+              <input
+                type="text"
+                value={locationAddress}
+                onChange={(e) => setLocationAddress(e.target.value)}
+                placeholder="주소 또는 메모 (선택)"
+                className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-violet-400"
+              />
+              <div className="flex gap-2 mt-1">
+                <button
+                  onClick={suggestLocation}
+                  disabled={!locationName.trim() || locationSubmitting}
+                  className="flex-1 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
+                >
+                  {locationSubmitting ? "등록 중..." : "등록"}
+                </button>
+                <button
+                  onClick={() => { setShowLocationForm(false); setLocationName(""); setLocationAddress("") }}
+                  className="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm transition-colors"
+                >
+                  취소
+                </button>
+              </div>
+            </div>
+          )}
+
+          {locations.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-gray-400 text-sm">
+              아직 추천된 장소가 없어요.<br />
+              {nameSaved ? "첫 번째로 추천해보세요!" : "이름을 입력하면 장소를 추천할 수 있어요."}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {[...locations].sort((a, b) => b.voters.length - a.voters.length).map((loc) => {
+                const myVote = loc.voters.includes(name)
+                return (
+                  <div key={loc.id} className={`rounded-2xl border bg-white p-4 flex items-center gap-3 transition-all ${myVote ? "border-violet-300" : "border-gray-200"}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-gray-800 font-semibold text-sm truncate">{loc.name}</p>
+                      {loc.address && <p className="text-gray-400 text-xs mt-0.5 truncate">{loc.address}</p>}
+                      <p className="text-gray-400 text-xs mt-0.5">추천: {loc.suggested_by}</p>
+                    </div>
+                    <button
+                      onClick={() => voteLocation(loc.id)}
+                      disabled={!nameSaved || votingLocation === loc.id}
+                      className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl border transition-all ${
+                        myVote
+                          ? "bg-violet-100 border-violet-400 text-violet-700"
+                          : nameSaved
+                          ? "bg-gray-50 border-gray-200 text-gray-500 hover:border-violet-300 hover:bg-violet-50"
+                          : "bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed"
+                      }`}
+                    >
+                      <span className="text-base">{myVote ? "👍" : "👍"}</span>
+                      <span className="text-xs font-bold">{loc.voters.length}</span>
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
 
         <div className="rounded-2xl bg-violet-50 border border-violet-200 p-5 mb-8">
           <h3 className="text-violet-700 font-semibold text-sm mb-3">📌 참가 안내</h3>
