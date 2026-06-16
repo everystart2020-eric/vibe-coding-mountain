@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react"
 import Link from "next/link"
-import html2canvas from "html2canvas"
 
 const NAME_KEY = "vote-name"
 
@@ -59,11 +58,17 @@ export default function Schedule2Page() {
     if (!scheduleRef.current || downloading) return
     setDownloading(true)
     try {
+      const html2canvas = (await import("html2canvas")).default
       const canvas = await html2canvas(scheduleRef.current, { scale: 2, useCORS: true, backgroundColor: "#fafaf9" })
       const link = document.createElement("a")
       link.download = "바이브코딩산악학교_2기_시간표.jpg"
       link.href = canvas.toDataURL("image/jpeg", 0.95)
+      document.body.appendChild(link)
       link.click()
+      document.body.removeChild(link)
+    } catch (e) {
+      console.error("다운로드 실패:", e)
+      alert("저장에 실패했어요. 다시 시도해주세요.")
     } finally {
       setDownloading(false)
     }
