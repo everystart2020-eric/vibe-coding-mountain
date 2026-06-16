@@ -249,13 +249,14 @@ export default function Schedule2Page() {
     setError(null)
     setSubmitting(week)
     try {
+      const isCancel = myVotes[week] === slot
       const res = await fetch("/api/votes", {
-        method: "POST",
+        method: isCancel ? "DELETE" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, week, time_slot: slot }),
+        body: JSON.stringify(isCancel ? { name, week } : { name, week, time_slot: slot }),
       })
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? "투표 저장 실패")
+      if (!res.ok) throw new Error(data.error ?? (isCancel ? "투표 취소 실패" : "투표 저장 실패"))
       await fetchVotes(name)
     } catch (e) {
       setError(e instanceof Error ? e.message : "투표 중 오류가 발생했습니다")
@@ -474,11 +475,16 @@ export default function Schedule2Page() {
                                 )}
                               </div>
                             </div>
-                            {count > 0 && (
-                              <span className="text-gray-400 text-xs">
-                                {voters.join(", ")} ({count}명)
-                              </span>
-                            )}
+                            <div className="flex items-center gap-2">
+                              {isMyVote && (
+                                <span className="text-violet-400 text-xs">다시 누르면 취소</span>
+                              )}
+                              {count > 0 && (
+                                <span className="text-gray-400 text-xs">
+                                  {voters.join(", ")} ({count}명)
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </button>
                       )

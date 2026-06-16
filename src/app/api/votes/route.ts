@@ -54,3 +54,23 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true })
 }
+
+export async function DELETE(req: NextRequest) {
+  const { name, week } = await req.json()
+
+  if (!name?.trim() || !week) {
+    return NextResponse.json({ error: "필수 항목 누락" }, { status: 400 })
+  }
+
+  const { error } = await supabase
+    .from("votes")
+    .delete()
+    .eq("name", name.trim())
+    .eq("week", week)
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+
+  return NextResponse.json({ ok: true })
+}
