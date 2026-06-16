@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import Link from "next/link"
+import html2canvas from "html2canvas"
 
 const NAME_KEY = "vote-name"
 
@@ -34,6 +35,8 @@ function buildCounts(votes: VoteRecord[]): VoteCounts {
 }
 
 export default function Schedule2Page() {
+  const scheduleRef = useRef<HTMLDivElement>(null)
+  const [downloading, setDownloading] = useState(false)
   const [name, setName] = useState("")
   const [nameInput, setNameInput] = useState("")
   const [nameSaved, setNameSaved] = useState(false)
@@ -51,6 +54,20 @@ export default function Schedule2Page() {
   const [locationAddress, setLocationAddress] = useState("")
   const [locationSubmitting, setLocationSubmitting] = useState(false)
   const [votingLocation, setVotingLocation] = useState<string | null>(null)
+
+  async function downloadSchedule() {
+    if (!scheduleRef.current || downloading) return
+    setDownloading(true)
+    try {
+      const canvas = await html2canvas(scheduleRef.current, { scale: 2, useCORS: true, backgroundColor: "#fafaf9" })
+      const link = document.createElement("a")
+      link.download = "바이브코딩산악학교_2기_시간표.jpg"
+      link.href = canvas.toDataURL("image/jpeg", 0.95)
+      link.click()
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   const fetchLocations = useCallback(async () => {
     try {
@@ -266,8 +283,19 @@ export default function Schedule2Page() {
           </div>
         )}
 
+        {/* 다운로드 버튼 */}
+        <div className="mb-4 flex justify-end">
+          <button
+            onClick={downloadSchedule}
+            disabled={downloading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-white text-sm font-semibold transition-colors"
+          >
+            {downloading ? "저장 중..." : "📥 시간표 JPG 저장"}
+          </button>
+        </div>
+
         {/* 주차별 투표 */}
-        <div className="flex flex-col gap-4 mb-8">
+        <div ref={scheduleRef} className="flex flex-col gap-4 mb-8">
           {WEEKS.map((w, idx) => {
             const mySlot = myVotes[w.week]
             const weekCounts = counts[w.week] ?? {}
