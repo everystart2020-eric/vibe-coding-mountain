@@ -14,10 +14,10 @@ type LocationSuggestion = {
 }
 
 const WEEKS = [
-  { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
+  { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"] },
   { week: 12, date: "7월 18일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
-  { week: 13, date: "7월 25일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
-  { week: 14, date: "8월 8일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
+  { week: 13, date: "7월 25일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 14, date: "8월 8일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"] },
 ]
 
 type VoteRecord = { week: number; time_slot: string; name: string }
