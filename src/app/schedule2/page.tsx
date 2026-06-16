@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback, useRef } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 
 const NAME_KEY = "vote-name"
@@ -34,7 +34,6 @@ function buildCounts(votes: VoteRecord[]): VoteCounts {
 }
 
 export default function Schedule2Page() {
-  const scheduleRef = useRef<HTMLDivElement>(null)
   const [downloading, setDownloading] = useState(false)
   const [name, setName] = useState("")
   const [nameInput, setNameInput] = useState("")
@@ -54,12 +53,111 @@ export default function Schedule2Page() {
   const [locationSubmitting, setLocationSubmitting] = useState(false)
   const [votingLocation, setVotingLocation] = useState<string | null>(null)
 
-  async function downloadSchedule() {
-    if (!scheduleRef.current || downloading) return
+  function downloadSchedule() {
+    if (downloading) return
     setDownloading(true)
     try {
-      const html2canvas = (await import("html2canvas")).default
-      const canvas = await html2canvas(scheduleRef.current, { scale: 2, useCORS: true, backgroundColor: "#fafaf9" })
+      const W = 800
+      const PADDING = 40
+      const ROW_H = 72
+      const HEADER_H = 160
+      const H = HEADER_H + WEEKS.length * ROW_H + PADDING * 2
+
+      const canvas = document.createElement("canvas")
+      canvas.width = W * 2
+      canvas.height = H * 2
+      const ctx = canvas.getContext("2d")!
+      ctx.scale(2, 2)
+
+      // 배경
+      ctx.fillStyle = "#fafaf9"
+      ctx.fillRect(0, 0, W, H)
+
+      // 헤더
+      ctx.fillStyle = "#7c3aed"
+      ctx.fillRect(0, 0, W, HEADER_H)
+      ctx.fillStyle = "#ffffff"
+      ctx.font = "bold 26px sans-serif"
+      ctx.fillText("바이브 코딩 산악학교 2기", PADDING, 52)
+      ctx.font = "16px sans-serif"
+      ctx.fillStyle = "#ddd6fe"
+      ctx.fillText("오프라인 일정 · 2025년 7–8월 · 총 4회", PADDING, 82)
+      ctx.font = "bold 14px sans-serif"
+      ctx.fillStyle = "#c4b5fd"
+      ctx.fillText("📅 매주 토요일 · 장소 추후 공지", PADDING, 112)
+
+      // 행
+      WEEKS.forEach((w, i) => {
+        const y = HEADER_H + i * ROW_H
+        const confirmed = w.confirmedSlot != null
+
+        // 행 배경
+        ctx.fillStyle = i % 2 === 0 ? "#ffffff" : "#f5f3ff"
+        ctx.fillRect(0, y, W, ROW_H)
+
+        // 확정 행 왼쪽 포인트
+        if (confirmed) {
+          ctx.fillStyle = "#10b981"
+          ctx.fillRect(0, y, 4, ROW_H)
+        }
+
+        // 회차
+        ctx.beginPath()
+        ctx.fillStyle = confirmed ? "#10b981" : "#7c3aed"
+        ctx.roundRect(PADDING, y + 18, 44, 28, 8)
+        ctx.fill()
+        ctx.fillStyle = "#ffffff"
+        ctx.font = "bold 13px sans-serif"
+        ctx.textAlign = "center"
+        ctx.fillText(`${i + 1}회`, PADDING + 22, y + 37)
+        ctx.textAlign = "left"
+
+        // 날짜
+        ctx.fillStyle = "#1f2937"
+        ctx.font = "bold 15px sans-serif"
+        ctx.fillText(w.date, PADDING + 58, y + 28)
+
+        // 라벨
+        ctx.fillStyle = "#6b7280"
+        ctx.font = "12px sans-serif"
+        ctx.fillText(w.label, PADDING + 58, y + 48)
+
+        // 시간 / 확정 배지
+        if (confirmed) {
+          ctx.fillStyle = "#d1fae5"
+          ctx.beginPath()
+          ctx.roundRect(W - PADDING - 140, y + 20, 140, 28, 8)
+          ctx.fill()
+          ctx.fillStyle = "#065f46"
+          ctx.font = "bold 13px sans-serif"
+          ctx.textAlign = "right"
+          ctx.fillText(`✓ ${w.confirmedSlot} 확정`, W - PADDING, y + 39)
+          ctx.textAlign = "left"
+        } else {
+          ctx.fillStyle = "#9ca3af"
+          ctx.font = "13px sans-serif"
+          ctx.textAlign = "right"
+          ctx.fillText(w.slots.join(" / "), W - PADDING, y + 39)
+          ctx.textAlign = "left"
+        }
+
+        // 구분선
+        ctx.strokeStyle = "#e5e7eb"
+        ctx.lineWidth = 1
+        ctx.beginPath()
+        ctx.moveTo(0, y + ROW_H)
+        ctx.lineTo(W, y + ROW_H)
+        ctx.stroke()
+      })
+
+      // 하단 여백
+      ctx.fillStyle = "#f5f3ff"
+      ctx.fillRect(0, HEADER_H + WEEKS.length * ROW_H, W, PADDING * 2)
+      ctx.fillStyle = "#7c3aed"
+      ctx.font = "12px sans-serif"
+      ctx.textAlign = "center"
+      ctx.fillText("노트북 지참 필수 · 문의는 강사에게 직접 연락주세요", W / 2, HEADER_H + WEEKS.length * ROW_H + PADDING)
+
       const link = document.createElement("a")
       link.download = "바이브코딩산악학교_2기_시간표.jpg"
       link.href = canvas.toDataURL("image/jpeg", 0.95)
@@ -300,7 +398,7 @@ export default function Schedule2Page() {
         </div>
 
         {/* 주차별 투표 */}
-        <div ref={scheduleRef} className="flex flex-col gap-4 mb-8">
+        <div className="flex flex-col gap-4 mb-8">
           {WEEKS.map((w, idx) => {
             const mySlot = myVotes[w.week]
             const weekCounts = counts[w.week] ?? {}
