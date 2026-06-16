@@ -14,11 +14,10 @@ type LocationSuggestion = {
 }
 
 const WEEKS = [
-  { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 12, date: "7월 18일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 13, date: "7월 25일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 14, date: "8월 8일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"] },
-  { week: 15, date: "8월 15일 (토)", label: "5회", slots: ["오전 11:00", "오후 2:00"] },
+  { week: 11, date: "7월 11일 (토)", label: "1회 · 기본 AI 활용 교육", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
+  { week: 12, date: "7월 18일 (토)", label: "2회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
+  { week: 13, date: "7월 25일 (토)", label: "3회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
+  { week: 14, date: "8월 8일 (토)", label: "4회", slots: ["오전 11:00", "오후 2:00"], confirmedSlot: "오전 11:00" },
 ]
 
 type VoteRecord = { week: number; time_slot: string; name: string }
@@ -278,102 +277,118 @@ export default function Schedule2Page() {
             const maxVotes = Math.max(...allSlotKeys.map((s) => (weekCounts[s] ?? []).length), 1)
 
             return (
-              <div key={w.week} className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
+              <div key={w.week} className={`rounded-2xl border bg-white shadow-sm p-5 ${w.confirmedSlot ? "border-emerald-300" : "border-gray-200"}`}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${w.confirmedSlot ? "bg-gradient-to-br from-emerald-500 to-teal-600" : "bg-gradient-to-br from-violet-500 to-purple-600"}`}>
                     <span className="text-white font-black text-sm">{idx + 1}회</span>
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <p className="text-gray-800 font-semibold text-sm">{w.date}</p>
                     <p className="text-gray-400 text-xs">{w.label}{totalVotes > 0 ? ` · ${totalVotes}명 투표` : ""}</p>
                   </div>
+                  {w.confirmedSlot && (
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 border border-emerald-300">
+                      <span className="text-emerald-600 text-xs">✓</span>
+                      <span className="text-emerald-700 text-xs font-bold">{w.confirmedSlot} 확정</span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  {[
-                    ...w.slots.map((slot) => ({ slot, added_by: null })),
-                    ...customSlotItems,
-                  ].map(({ slot, added_by }) => {
-                    const voters = weekCounts[slot] ?? []
-                    const count = voters.length
-                    const isMyVote = mySlot === slot
-                    const barWidth = count > 0 ? Math.round((count / maxVotes) * 100) : 0
-
-                    return (
-                      <button
-                        key={slot}
-                        onClick={() => nameSaved && vote(w.week, slot)}
-                        disabled={!nameSaved || submitting === w.week}
-                        className={`relative w-full text-left rounded-xl border p-3 transition-all duration-200 overflow-hidden ${
-                          isMyVote
-                            ? "border-violet-500 bg-violet-50"
-                            : nameSaved
-                            ? "border-gray-200 bg-white hover:border-violet-300 hover:bg-violet-50/50"
-                            : "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
-                        }`}
-                      >
-                        {count > 0 && (
-                          <div
-                            className="absolute inset-y-0 left-0 bg-violet-100 transition-all duration-500"
-                            style={{ width: `${barWidth}%` }}
-                          />
-                        )}
-                        <div className="relative flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            {isMyVote && <span className="text-violet-600 text-sm">✓</span>}
-                            <div>
-                              <span className={`text-sm font-medium ${isMyVote ? "text-violet-700" : "text-gray-600"}`}>
-                                {slot}
-                              </span>
-                              {added_by && (
-                                <span className="ml-2 text-gray-400 text-xs">({added_by} 추가)</span>
-                              )}
-                            </div>
-                          </div>
-                          {count > 0 && (
-                            <span className="text-gray-400 text-xs">
-                              {voters.join(", ")} ({count}명)
-                            </span>
-                          )}
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-
-                {addingSlot === w.week ? (
-                  <div className="flex gap-2 mt-2">
-                    <input
-                      type="text"
-                      value={newSlotInput}
-                      onChange={(e) => setNewSlotInput(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && addSlot(w.week)}
-                      placeholder="예: 오후 4:00"
-                      autoFocus
-                      className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-violet-400"
-                    />
-                    <button
-                      onClick={() => addSlot(w.week)}
-                      disabled={!newSlotInput.trim()}
-                      className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
-                    >
-                      추가
-                    </button>
-                    <button
-                      onClick={() => { setAddingSlot(null); setNewSlotInput("") }}
-                      className="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm transition-colors"
-                    >
-                      취소
-                    </button>
+                {w.confirmedSlot ? (
+                  <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 flex items-center gap-2">
+                    <span className="text-emerald-500 text-base">✅</span>
+                    <span className="text-emerald-700 text-sm font-semibold">{w.confirmedSlot} · 시간 확정</span>
+                    <span className="ml-auto text-emerald-400 text-xs">{(weekCounts[w.confirmedSlot] ?? []).length}명 참가 예정</span>
                   </div>
-                ) : nameSaved ? (
-                  <button
-                    onClick={() => setAddingSlot(w.week)}
-                    className="mt-2 w-full text-center text-gray-400 hover:text-gray-600 text-xs py-1.5 rounded-xl border border-dashed border-gray-200 hover:border-gray-300 transition-colors"
-                  >
-                    + 시간 추가
-                  </button>
-                ) : null}
+                ) : (
+                  <>
+                  <div className="flex flex-col gap-2">
+                    {[
+                      ...w.slots.map((slot) => ({ slot, added_by: null })),
+                      ...customSlotItems,
+                    ].map(({ slot, added_by }) => {
+                      const voters = weekCounts[slot] ?? []
+                      const count = voters.length
+                      const isMyVote = mySlot === slot
+                      const barWidth = count > 0 ? Math.round((count / maxVotes) * 100) : 0
+
+                      return (
+                        <button
+                          key={slot}
+                          onClick={() => nameSaved && vote(w.week, slot)}
+                          disabled={!nameSaved || submitting === w.week}
+                          className={`relative w-full text-left rounded-xl border p-3 transition-all duration-200 overflow-hidden ${
+                            isMyVote
+                              ? "border-violet-500 bg-violet-50"
+                              : nameSaved
+                              ? "border-gray-200 bg-white hover:border-violet-300 hover:bg-violet-50/50"
+                              : "border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed"
+                          }`}
+                        >
+                          {count > 0 && (
+                            <div
+                              className="absolute inset-y-0 left-0 bg-violet-100 transition-all duration-500"
+                              style={{ width: `${barWidth}%` }}
+                            />
+                          )}
+                          <div className="relative flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              {isMyVote && <span className="text-violet-600 text-sm">✓</span>}
+                              <div>
+                                <span className={`text-sm font-medium ${isMyVote ? "text-violet-700" : "text-gray-600"}`}>
+                                  {slot}
+                                </span>
+                                {added_by && (
+                                  <span className="ml-2 text-gray-400 text-xs">({added_by} 추가)</span>
+                                )}
+                              </div>
+                            </div>
+                            {count > 0 && (
+                              <span className="text-gray-400 text-xs">
+                                {voters.join(", ")} ({count}명)
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {addingSlot === w.week ? (
+                    <div className="flex gap-2 mt-2">
+                      <input
+                        type="text"
+                        value={newSlotInput}
+                        onChange={(e) => setNewSlotInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && addSlot(w.week)}
+                        placeholder="예: 오후 4:00"
+                        autoFocus
+                        className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-gray-800 placeholder-gray-400 text-sm focus:outline-none focus:border-violet-400"
+                      />
+                      <button
+                        onClick={() => addSlot(w.week)}
+                        disabled={!newSlotInput.trim()}
+                        className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-sm font-semibold transition-colors"
+                      >
+                        추가
+                      </button>
+                      <button
+                        onClick={() => { setAddingSlot(null); setNewSlotInput("") }}
+                        className="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-500 text-sm transition-colors"
+                      >
+                        취소
+                      </button>
+                    </div>
+                  ) : nameSaved ? (
+                    <button
+                      onClick={() => setAddingSlot(w.week)}
+                      className="mt-2 w-full text-center text-gray-400 hover:text-gray-600 text-xs py-1.5 rounded-xl border border-dashed border-gray-200 hover:border-gray-300 transition-colors"
+                    >
+                      + 시간 추가
+                    </button>
+                  ) : null}
+                  </>
+                )}
               </div>
             )
           })}
@@ -477,7 +492,7 @@ export default function Schedule2Page() {
         <div className="rounded-2xl bg-violet-50 border border-violet-200 p-5 mb-8">
           <h3 className="text-violet-700 font-semibold text-sm mb-3">📌 참가 안내</h3>
           <ul className="space-y-1.5 text-gray-600 text-sm">
-            <li>· 총 5회 진행 (7월 11일 ~ 8월 15일)</li>
+            <li>· 총 4회 진행 (7월 11일 ~ 8월 8일)</li>
             <li>· 이미 투표한 경우 다시 선택하면 변경됩니다</li>
             <li>· 노트북을 지참해주세요</li>
             <li>· 장소는 확정 후 별도 안내드립니다</li>
